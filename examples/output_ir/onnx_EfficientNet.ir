@@ -1,0 +1,690 @@
+func.func @forward(%input.1: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32>  { 
+	%1="ufront.conv2d"(%input.1){groups=1, kernel=[3, 3], pad=[1, 1], stride=[2, 2]}:(tensor<1x3x224x224xf32>) -> tensor<1x24x112x112xf32>
+	%2="ufront.batchnorm"(%1){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%3="ufront.sigmoid"(%2):(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%4="ufront.multiply"(%2, %3):(tensor<1x24x112x112xf32>, tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%5="ufront.conv2d"(%4){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%6="ufront.batchnorm"(%5){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%7="ufront.sigmoid"(%6):(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%8="ufront.multiply"(%6, %7):(tensor<1x24x112x112xf32>, tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%9="ufront.add"(%8, %4):(tensor<1x24x112x112xf32>, tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%10="ufront.conv2d"(%9){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%11="ufront.batchnorm"(%10){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%12="ufront.sigmoid"(%11):(tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%13="ufront.multiply"(%11, %12):(tensor<1x24x112x112xf32>, tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%14="ufront.tensor"(){dtype="Float", initializer="504b03041400000008000000210054e545f7490000008800000005001400782e6e707901001000880000000000000049000000000000009bec17ea1b10c9c850c650ad9e925a9c5ca46ea5a06e9366a1aea3a09e965f54529498179f5f94920a12774bcc294e058a17672416a402f91a863a0a50a4a9a350ab4006e062800200504b010214031400000008000000210054e545f74900000088000000050000000000000000000000800100000000782e6e7079504b0506000000000100010033000000800000000000", requires_grad=false}:() -> tensor<1x1x1x1xf32>
+	%15="ufront.uniform_like"(%14){dtype="Float"}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%16="ufront.tensor"(){dtype="Float", initializer="504b03041400000008000000210054e545f7490000008800000005001400782e6e707901001000880000000000000049000000000000009bec17ea1b10c9c850c650ad9e925a9c5ca46ea5a06e9366a1aea3a09e965f54529498179f5f94920a12774bcc294e058a17672416a402f91a863a0a50a4a9a350ab4006e062800200504b010214031400000008000000210054e545f74900000088000000050000000000000000000000800100000000782e6e7079504b0506000000000100010033000000800000000000", requires_grad=false}:() -> tensor<1x1x1x1xf32>
+	%17="ufront.less"(%15, %16):(tensor<1x1x1x1xf32>, tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%18="ufront.cast"(%17){dtype="Float"}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%19="ufront.divide"(%18){scalar=0.9950000047683716}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%20="ufront.multiply"(%13, %19):(tensor<1x24x112x112xf32>, tensor<1x1x1x1xf32>) -> tensor<1x24x112x112xf32>
+	%21="ufront.add"(%20, %9):(tensor<1x24x112x112xf32>, tensor<1x24x112x112xf32>) -> tensor<1x24x112x112xf32>
+	%22="ufront.conv2d"(%21){groups=1, kernel=[3, 3], pad=[1, 1], stride=[2, 2]}:(tensor<1x24x112x112xf32>) -> tensor<1x96x56x56xf32>
+	%23="ufront.batchnorm"(%22){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x96x56x56xf32>) -> tensor<1x96x56x56xf32>
+	%24="ufront.sigmoid"(%23):(tensor<1x96x56x56xf32>) -> tensor<1x96x56x56xf32>
+	%25="ufront.multiply"(%23, %24):(tensor<1x96x56x56xf32>, tensor<1x96x56x56xf32>) -> tensor<1x96x56x56xf32>
+	%26="ufront.conv2d"(%25){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x96x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%27="ufront.batchnorm"(%26){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%28="ufront.conv2d"(%27){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x48x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%29="ufront.batchnorm"(%28){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%30="ufront.sigmoid"(%29):(tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%31="ufront.multiply"(%29, %30):(tensor<1x192x56x56xf32>, tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%32="ufront.conv2d"(%31){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x192x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%33="ufront.batchnorm"(%32){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%34="ufront.divide"(%18){scalar=0.9850000143051147}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%35="ufront.multiply"(%33, %34):(tensor<1x48x56x56xf32>, tensor<1x1x1x1xf32>) -> tensor<1x48x56x56xf32>
+	%36="ufront.add"(%35, %27):(tensor<1x48x56x56xf32>, tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%37="ufront.conv2d"(%36){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x48x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%38="ufront.batchnorm"(%37){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%39="ufront.sigmoid"(%38):(tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%40="ufront.multiply"(%38, %39):(tensor<1x192x56x56xf32>, tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%41="ufront.conv2d"(%40){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x192x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%42="ufront.batchnorm"(%41){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%43="ufront.divide"(%18){scalar=0.9800000190734863}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%44="ufront.multiply"(%42, %43):(tensor<1x48x56x56xf32>, tensor<1x1x1x1xf32>) -> tensor<1x48x56x56xf32>
+	%45="ufront.add"(%44, %36):(tensor<1x48x56x56xf32>, tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%46="ufront.conv2d"(%45){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x48x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%47="ufront.batchnorm"(%46){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%48="ufront.sigmoid"(%47):(tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%49="ufront.multiply"(%47, %48):(tensor<1x192x56x56xf32>, tensor<1x192x56x56xf32>) -> tensor<1x192x56x56xf32>
+	%50="ufront.conv2d"(%49){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x192x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%51="ufront.batchnorm"(%50){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%52="ufront.divide"(%18){scalar=0.9750000238418579}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%53="ufront.multiply"(%51, %52):(tensor<1x48x56x56xf32>, tensor<1x1x1x1xf32>) -> tensor<1x48x56x56xf32>
+	%54="ufront.add"(%53, %45):(tensor<1x48x56x56xf32>, tensor<1x48x56x56xf32>) -> tensor<1x48x56x56xf32>
+	%55="ufront.conv2d"(%54){groups=1, kernel=[3, 3], pad=[1, 1], stride=[2, 2]}:(tensor<1x48x56x56xf32>) -> tensor<1x192x28x28xf32>
+	%56="ufront.batchnorm"(%55){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+	%57="ufront.sigmoid"(%56):(tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+	%58="ufront.multiply"(%56, %57):(tensor<1x192x28x28xf32>, tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+	%59="ufront.conv2d"(%58){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x192x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%60="ufront.batchnorm"(%59){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%61="ufront.conv2d"(%60){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x64x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%62="ufront.batchnorm"(%61){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%63="ufront.sigmoid"(%62):(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%64="ufront.multiply"(%62, %63):(tensor<1x256x28x28xf32>, tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%65="ufront.conv2d"(%64){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%66="ufront.batchnorm"(%65){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%67="ufront.divide"(%18){scalar=0.9649999737739563}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%68="ufront.multiply"(%66, %67):(tensor<1x64x28x28xf32>, tensor<1x1x1x1xf32>) -> tensor<1x64x28x28xf32>
+	%69="ufront.add"(%68, %60):(tensor<1x64x28x28xf32>, tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%70="ufront.conv2d"(%69){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x64x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%71="ufront.batchnorm"(%70){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%72="ufront.sigmoid"(%71):(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%73="ufront.multiply"(%71, %72):(tensor<1x256x28x28xf32>, tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%74="ufront.conv2d"(%73){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%75="ufront.batchnorm"(%74){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%76="ufront.divide"(%18){scalar=0.9599999785423279}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%77="ufront.multiply"(%75, %76):(tensor<1x64x28x28xf32>, tensor<1x1x1x1xf32>) -> tensor<1x64x28x28xf32>
+	%78="ufront.add"(%77, %69):(tensor<1x64x28x28xf32>, tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%79="ufront.conv2d"(%78){groups=1, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x64x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%80="ufront.batchnorm"(%79){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%81="ufront.sigmoid"(%80):(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%82="ufront.multiply"(%80, %81):(tensor<1x256x28x28xf32>, tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%83="ufront.conv2d"(%82){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%84="ufront.batchnorm"(%83){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%85="ufront.divide"(%18){scalar=0.9549999833106995}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%86="ufront.multiply"(%84, %85):(tensor<1x64x28x28xf32>, tensor<1x1x1x1xf32>) -> tensor<1x64x28x28xf32>
+	%87="ufront.add"(%86, %78):(tensor<1x64x28x28xf32>, tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+	%88="ufront.conv2d"(%87){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%89="ufront.batchnorm"(%88){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%90="ufront.sigmoid"(%89):(tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%91="ufront.multiply"(%89, %90):(tensor<1x256x28x28xf32>, tensor<1x256x28x28xf32>) -> tensor<1x256x28x28xf32>
+	%92="ufront.conv2d"(%91){groups=256, kernel=[3, 3], pad=[1, 1], stride=[2, 2]}:(tensor<1x256x28x28xf32>) -> tensor<1x256x14x14xf32>
+	%93="ufront.batchnorm"(%92){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+	%94="ufront.sigmoid"(%93):(tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+	%95="ufront.multiply"(%93, %94):(tensor<1x256x14x14xf32>, tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+	%96="ufront.pool2d"(%95){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x256x14x14xf32>) -> tensor<1x256x1x1xf32>
+	%97="ufront.conv2d"(%96){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x1x1xf32>) -> tensor<1x16x1x1xf32>
+	%98="ufront.sigmoid"(%97):(tensor<1x16x1x1xf32>) -> tensor<1x16x1x1xf32>
+	%99="ufront.multiply"(%97, %98):(tensor<1x16x1x1xf32>, tensor<1x16x1x1xf32>) -> tensor<1x16x1x1xf32>
+	%100="ufront.conv2d"(%99){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x16x1x1xf32>) -> tensor<1x256x1x1xf32>
+	%101="ufront.sigmoid"(%100):(tensor<1x256x1x1xf32>) -> tensor<1x256x1x1xf32>
+	%102="ufront.multiply"(%101, %95):(tensor<1x256x1x1xf32>, tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+	%103="ufront.conv2d"(%102){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%104="ufront.batchnorm"(%103){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%105="ufront.conv2d"(%104){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x128x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%106="ufront.batchnorm"(%105){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%107="ufront.sigmoid"(%106):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%108="ufront.multiply"(%106, %107):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%109="ufront.conv2d"(%108){groups=512, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%110="ufront.batchnorm"(%109){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%111="ufront.sigmoid"(%110):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%112="ufront.multiply"(%110, %111):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%113="ufront.pool2d"(%112){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x1x1xf32>
+	%114="ufront.conv2d"(%113){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%115="ufront.sigmoid"(%114):(tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%116="ufront.multiply"(%114, %115):(tensor<1x32x1x1xf32>, tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%117="ufront.conv2d"(%116){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x32x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%118="ufront.sigmoid"(%117):(tensor<1x512x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%119="ufront.multiply"(%118, %112):(tensor<1x512x1x1xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%120="ufront.conv2d"(%119){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%121="ufront.batchnorm"(%120){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%122="ufront.divide"(%18){scalar=0.9449999928474426}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%123="ufront.multiply"(%121, %122):(tensor<1x128x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x128x14x14xf32>
+	%124="ufront.add"(%123, %104):(tensor<1x128x14x14xf32>, tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%125="ufront.conv2d"(%124){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x128x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%126="ufront.batchnorm"(%125){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%127="ufront.sigmoid"(%126):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%128="ufront.multiply"(%126, %127):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%129="ufront.conv2d"(%128){groups=512, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%130="ufront.batchnorm"(%129){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%131="ufront.sigmoid"(%130):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%132="ufront.multiply"(%130, %131):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%133="ufront.pool2d"(%132){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x1x1xf32>
+	%134="ufront.conv2d"(%133){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%135="ufront.sigmoid"(%134):(tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%136="ufront.multiply"(%134, %135):(tensor<1x32x1x1xf32>, tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%137="ufront.conv2d"(%136){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x32x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%138="ufront.sigmoid"(%137):(tensor<1x512x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%139="ufront.multiply"(%138, %132):(tensor<1x512x1x1xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%140="ufront.conv2d"(%139){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%141="ufront.batchnorm"(%140){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%142="ufront.divide"(%18){scalar=0.9399999976158142}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%143="ufront.multiply"(%141, %142):(tensor<1x128x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x128x14x14xf32>
+	%144="ufront.add"(%143, %124):(tensor<1x128x14x14xf32>, tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%145="ufront.conv2d"(%144){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x128x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%146="ufront.batchnorm"(%145){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%147="ufront.sigmoid"(%146):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%148="ufront.multiply"(%146, %147):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%149="ufront.conv2d"(%148){groups=512, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%150="ufront.batchnorm"(%149){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%151="ufront.sigmoid"(%150):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%152="ufront.multiply"(%150, %151):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%153="ufront.pool2d"(%152){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x1x1xf32>
+	%154="ufront.conv2d"(%153){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%155="ufront.sigmoid"(%154):(tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%156="ufront.multiply"(%154, %155):(tensor<1x32x1x1xf32>, tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%157="ufront.conv2d"(%156){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x32x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%158="ufront.sigmoid"(%157):(tensor<1x512x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%159="ufront.multiply"(%158, %152):(tensor<1x512x1x1xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%160="ufront.conv2d"(%159){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%161="ufront.batchnorm"(%160){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%162="ufront.divide"(%18){scalar=0.9350000023841858}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%163="ufront.multiply"(%161, %162):(tensor<1x128x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x128x14x14xf32>
+	%164="ufront.add"(%163, %144):(tensor<1x128x14x14xf32>, tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%165="ufront.conv2d"(%164){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x128x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%166="ufront.batchnorm"(%165){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%167="ufront.sigmoid"(%166):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%168="ufront.multiply"(%166, %167):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%169="ufront.conv2d"(%168){groups=512, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%170="ufront.batchnorm"(%169){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%171="ufront.sigmoid"(%170):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%172="ufront.multiply"(%170, %171):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%173="ufront.pool2d"(%172){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x1x1xf32>
+	%174="ufront.conv2d"(%173){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%175="ufront.sigmoid"(%174):(tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%176="ufront.multiply"(%174, %175):(tensor<1x32x1x1xf32>, tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%177="ufront.conv2d"(%176){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x32x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%178="ufront.sigmoid"(%177):(tensor<1x512x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%179="ufront.multiply"(%178, %172):(tensor<1x512x1x1xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%180="ufront.conv2d"(%179){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%181="ufront.batchnorm"(%180){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%182="ufront.divide"(%18){scalar=0.9300000071525574}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%183="ufront.multiply"(%181, %182):(tensor<1x128x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x128x14x14xf32>
+	%184="ufront.add"(%183, %164):(tensor<1x128x14x14xf32>, tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%185="ufront.conv2d"(%184){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x128x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%186="ufront.batchnorm"(%185){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%187="ufront.sigmoid"(%186):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%188="ufront.multiply"(%186, %187):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%189="ufront.conv2d"(%188){groups=512, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%190="ufront.batchnorm"(%189){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%191="ufront.sigmoid"(%190):(tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%192="ufront.multiply"(%190, %191):(tensor<1x512x14x14xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%193="ufront.pool2d"(%192){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x512x1x1xf32>
+	%194="ufront.conv2d"(%193){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%195="ufront.sigmoid"(%194):(tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%196="ufront.multiply"(%194, %195):(tensor<1x32x1x1xf32>, tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%197="ufront.conv2d"(%196){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x32x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%198="ufront.sigmoid"(%197):(tensor<1x512x1x1xf32>) -> tensor<1x512x1x1xf32>
+	%199="ufront.multiply"(%198, %192):(tensor<1x512x1x1xf32>, tensor<1x512x14x14xf32>) -> tensor<1x512x14x14xf32>
+	%200="ufront.conv2d"(%199){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x512x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%201="ufront.batchnorm"(%200){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%202="ufront.divide"(%18){scalar=0.925000011920929}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%203="ufront.multiply"(%201, %202):(tensor<1x128x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x128x14x14xf32>
+	%204="ufront.add"(%203, %184):(tensor<1x128x14x14xf32>, tensor<1x128x14x14xf32>) -> tensor<1x128x14x14xf32>
+	%205="ufront.conv2d"(%204){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x128x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%206="ufront.batchnorm"(%205){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%207="ufront.sigmoid"(%206):(tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%208="ufront.multiply"(%206, %207):(tensor<1x768x14x14xf32>, tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%209="ufront.conv2d"(%208){groups=768, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%210="ufront.batchnorm"(%209){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%211="ufront.sigmoid"(%210):(tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%212="ufront.multiply"(%210, %211):(tensor<1x768x14x14xf32>, tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%213="ufront.pool2d"(%212){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x768x14x14xf32>) -> tensor<1x768x1x1xf32>
+	%214="ufront.conv2d"(%213){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x768x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%215="ufront.sigmoid"(%214):(tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%216="ufront.multiply"(%214, %215):(tensor<1x32x1x1xf32>, tensor<1x32x1x1xf32>) -> tensor<1x32x1x1xf32>
+	%217="ufront.conv2d"(%216){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x32x1x1xf32>) -> tensor<1x768x1x1xf32>
+	%218="ufront.sigmoid"(%217):(tensor<1x768x1x1xf32>) -> tensor<1x768x1x1xf32>
+	%219="ufront.multiply"(%218, %212):(tensor<1x768x1x1xf32>, tensor<1x768x14x14xf32>) -> tensor<1x768x14x14xf32>
+	%220="ufront.conv2d"(%219){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x768x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%221="ufront.batchnorm"(%220){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%222="ufront.conv2d"(%221){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%223="ufront.batchnorm"(%222){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%224="ufront.sigmoid"(%223):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%225="ufront.multiply"(%223, %224):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%226="ufront.conv2d"(%225){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%227="ufront.batchnorm"(%226){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%228="ufront.sigmoid"(%227):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%229="ufront.multiply"(%227, %228):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%230="ufront.pool2d"(%229){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%231="ufront.conv2d"(%230){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%232="ufront.sigmoid"(%231):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%233="ufront.multiply"(%231, %232):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%234="ufront.conv2d"(%233){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%235="ufront.sigmoid"(%234):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%236="ufront.multiply"(%235, %229):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%237="ufront.conv2d"(%236){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%238="ufront.batchnorm"(%237){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%239="ufront.divide"(%18){scalar=0.9150000214576721}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%240="ufront.multiply"(%238, %239):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%241="ufront.add"(%240, %221):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%242="ufront.conv2d"(%241){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%243="ufront.batchnorm"(%242){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%244="ufront.sigmoid"(%243):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%245="ufront.multiply"(%243, %244):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%246="ufront.conv2d"(%245){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%247="ufront.batchnorm"(%246){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%248="ufront.sigmoid"(%247):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%249="ufront.multiply"(%247, %248):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%250="ufront.pool2d"(%249){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%251="ufront.conv2d"(%250){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%252="ufront.sigmoid"(%251):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%253="ufront.multiply"(%251, %252):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%254="ufront.conv2d"(%253){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%255="ufront.sigmoid"(%254):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%256="ufront.multiply"(%255, %249):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%257="ufront.conv2d"(%256){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%258="ufront.batchnorm"(%257){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%259="ufront.divide"(%18){scalar=0.9100000262260437}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%260="ufront.multiply"(%258, %259):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%261="ufront.add"(%260, %241):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%262="ufront.conv2d"(%261){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%263="ufront.batchnorm"(%262){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%264="ufront.sigmoid"(%263):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%265="ufront.multiply"(%263, %264):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%266="ufront.conv2d"(%265){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%267="ufront.batchnorm"(%266){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%268="ufront.sigmoid"(%267):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%269="ufront.multiply"(%267, %268):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%270="ufront.pool2d"(%269){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%271="ufront.conv2d"(%270){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%272="ufront.sigmoid"(%271):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%273="ufront.multiply"(%271, %272):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%274="ufront.conv2d"(%273){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%275="ufront.sigmoid"(%274):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%276="ufront.multiply"(%275, %269):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%277="ufront.conv2d"(%276){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%278="ufront.batchnorm"(%277){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%279="ufront.divide"(%18){scalar=0.9049999713897705}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%280="ufront.multiply"(%278, %279):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%281="ufront.add"(%280, %261):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%282="ufront.conv2d"(%281){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%283="ufront.batchnorm"(%282){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%284="ufront.sigmoid"(%283):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%285="ufront.multiply"(%283, %284):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%286="ufront.conv2d"(%285){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%287="ufront.batchnorm"(%286){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%288="ufront.sigmoid"(%287):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%289="ufront.multiply"(%287, %288):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%290="ufront.pool2d"(%289){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%291="ufront.conv2d"(%290){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%292="ufront.sigmoid"(%291):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%293="ufront.multiply"(%291, %292):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%294="ufront.conv2d"(%293){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%295="ufront.sigmoid"(%294):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%296="ufront.multiply"(%295, %289):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%297="ufront.conv2d"(%296){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%298="ufront.batchnorm"(%297){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%299="ufront.divide"(%18){scalar=0.8999999761581421}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%300="ufront.multiply"(%298, %299):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%301="ufront.add"(%300, %281):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%302="ufront.conv2d"(%301){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%303="ufront.batchnorm"(%302){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%304="ufront.sigmoid"(%303):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%305="ufront.multiply"(%303, %304):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%306="ufront.conv2d"(%305){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%307="ufront.batchnorm"(%306){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%308="ufront.sigmoid"(%307):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%309="ufront.multiply"(%307, %308):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%310="ufront.pool2d"(%309){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%311="ufront.conv2d"(%310){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%312="ufront.sigmoid"(%311):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%313="ufront.multiply"(%311, %312):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%314="ufront.conv2d"(%313){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%315="ufront.sigmoid"(%314):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%316="ufront.multiply"(%315, %309):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%317="ufront.conv2d"(%316){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%318="ufront.batchnorm"(%317){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%319="ufront.divide"(%18){scalar=0.8949999809265137}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%320="ufront.multiply"(%318, %319):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%321="ufront.add"(%320, %301):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%322="ufront.conv2d"(%321){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%323="ufront.batchnorm"(%322){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%324="ufront.sigmoid"(%323):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%325="ufront.multiply"(%323, %324):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%326="ufront.conv2d"(%325){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%327="ufront.batchnorm"(%326){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%328="ufront.sigmoid"(%327):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%329="ufront.multiply"(%327, %328):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%330="ufront.pool2d"(%329){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%331="ufront.conv2d"(%330){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%332="ufront.sigmoid"(%331):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%333="ufront.multiply"(%331, %332):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%334="ufront.conv2d"(%333){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%335="ufront.sigmoid"(%334):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%336="ufront.multiply"(%335, %329):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%337="ufront.conv2d"(%336){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%338="ufront.batchnorm"(%337){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%339="ufront.divide"(%18){scalar=0.8899999856948853}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%340="ufront.multiply"(%338, %339):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%341="ufront.add"(%340, %321):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%342="ufront.conv2d"(%341){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%343="ufront.batchnorm"(%342){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%344="ufront.sigmoid"(%343):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%345="ufront.multiply"(%343, %344):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%346="ufront.conv2d"(%345){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%347="ufront.batchnorm"(%346){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%348="ufront.sigmoid"(%347):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%349="ufront.multiply"(%347, %348):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%350="ufront.pool2d"(%349){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%351="ufront.conv2d"(%350){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%352="ufront.sigmoid"(%351):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%353="ufront.multiply"(%351, %352):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%354="ufront.conv2d"(%353){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%355="ufront.sigmoid"(%354):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%356="ufront.multiply"(%355, %349):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%357="ufront.conv2d"(%356){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%358="ufront.batchnorm"(%357){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%359="ufront.divide"(%18){scalar=0.8849999904632568}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%360="ufront.multiply"(%358, %359):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%361="ufront.add"(%360, %341):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%362="ufront.conv2d"(%361){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%363="ufront.batchnorm"(%362){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%364="ufront.sigmoid"(%363):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%365="ufront.multiply"(%363, %364):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%366="ufront.conv2d"(%365){groups=960, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%367="ufront.batchnorm"(%366){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%368="ufront.sigmoid"(%367):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%369="ufront.multiply"(%367, %368):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%370="ufront.pool2d"(%369){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x1x1xf32>
+	%371="ufront.conv2d"(%370){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%372="ufront.sigmoid"(%371):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%373="ufront.multiply"(%371, %372):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%374="ufront.conv2d"(%373){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%375="ufront.sigmoid"(%374):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%376="ufront.multiply"(%375, %369):(tensor<1x960x1x1xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%377="ufront.conv2d"(%376){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%378="ufront.batchnorm"(%377){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%379="ufront.divide"(%18){scalar=0.8799999952316284}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%380="ufront.multiply"(%378, %379):(tensor<1x160x14x14xf32>, tensor<1x1x1x1xf32>) -> tensor<1x160x14x14xf32>
+	%381="ufront.add"(%380, %361):(tensor<1x160x14x14xf32>, tensor<1x160x14x14xf32>) -> tensor<1x160x14x14xf32>
+	%382="ufront.conv2d"(%381){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x160x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%383="ufront.batchnorm"(%382){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%384="ufront.sigmoid"(%383):(tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%385="ufront.multiply"(%383, %384):(tensor<1x960x14x14xf32>, tensor<1x960x14x14xf32>) -> tensor<1x960x14x14xf32>
+	%386="ufront.conv2d"(%385){groups=960, kernel=[3, 3], pad=[1, 1], stride=[2, 2]}:(tensor<1x960x14x14xf32>) -> tensor<1x960x7x7xf32>
+	%387="ufront.batchnorm"(%386){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+	%388="ufront.sigmoid"(%387):(tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+	%389="ufront.multiply"(%387, %388):(tensor<1x960x7x7xf32>, tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+	%390="ufront.pool2d"(%389){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x960x7x7xf32>) -> tensor<1x960x1x1xf32>
+	%391="ufront.conv2d"(%390){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%392="ufront.sigmoid"(%391):(tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%393="ufront.multiply"(%391, %392):(tensor<1x40x1x1xf32>, tensor<1x40x1x1xf32>) -> tensor<1x40x1x1xf32>
+	%394="ufront.conv2d"(%393){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x40x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%395="ufront.sigmoid"(%394):(tensor<1x960x1x1xf32>) -> tensor<1x960x1x1xf32>
+	%396="ufront.multiply"(%395, %389):(tensor<1x960x1x1xf32>, tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+	%397="ufront.conv2d"(%396){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x960x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%398="ufront.batchnorm"(%397){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%399="ufront.conv2d"(%398){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%400="ufront.batchnorm"(%399){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%401="ufront.sigmoid"(%400):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%402="ufront.multiply"(%400, %401):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%403="ufront.conv2d"(%402){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%404="ufront.batchnorm"(%403){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%405="ufront.sigmoid"(%404):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%406="ufront.multiply"(%404, %405):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%407="ufront.pool2d"(%406){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%408="ufront.conv2d"(%407){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%409="ufront.sigmoid"(%408):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%410="ufront.multiply"(%408, %409):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%411="ufront.conv2d"(%410){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%412="ufront.sigmoid"(%411):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%413="ufront.multiply"(%412, %406):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%414="ufront.conv2d"(%413){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%415="ufront.batchnorm"(%414){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%416="ufront.divide"(%18){scalar=0.8700000047683716}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%417="ufront.multiply"(%415, %416):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%418="ufront.add"(%417, %398):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%419="ufront.conv2d"(%418){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%420="ufront.batchnorm"(%419){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%421="ufront.sigmoid"(%420):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%422="ufront.multiply"(%420, %421):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%423="ufront.conv2d"(%422){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%424="ufront.batchnorm"(%423){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%425="ufront.sigmoid"(%424):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%426="ufront.multiply"(%424, %425):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%427="ufront.pool2d"(%426){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%428="ufront.conv2d"(%427){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%429="ufront.sigmoid"(%428):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%430="ufront.multiply"(%428, %429):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%431="ufront.conv2d"(%430){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%432="ufront.sigmoid"(%431):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%433="ufront.multiply"(%432, %426):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%434="ufront.conv2d"(%433){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%435="ufront.batchnorm"(%434){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%436="ufront.divide"(%18){scalar=0.8650000095367432}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%437="ufront.multiply"(%435, %436):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%438="ufront.add"(%437, %418):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%439="ufront.conv2d"(%438){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%440="ufront.batchnorm"(%439){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%441="ufront.sigmoid"(%440):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%442="ufront.multiply"(%440, %441):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%443="ufront.conv2d"(%442){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%444="ufront.batchnorm"(%443){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%445="ufront.sigmoid"(%444):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%446="ufront.multiply"(%444, %445):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%447="ufront.pool2d"(%446){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%448="ufront.conv2d"(%447){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%449="ufront.sigmoid"(%448):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%450="ufront.multiply"(%448, %449):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%451="ufront.conv2d"(%450){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%452="ufront.sigmoid"(%451):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%453="ufront.multiply"(%452, %446):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%454="ufront.conv2d"(%453){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%455="ufront.batchnorm"(%454){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%456="ufront.divide"(%18){scalar=0.8600000143051147}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%457="ufront.multiply"(%455, %456):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%458="ufront.add"(%457, %438):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%459="ufront.conv2d"(%458){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%460="ufront.batchnorm"(%459){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%461="ufront.sigmoid"(%460):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%462="ufront.multiply"(%460, %461):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%463="ufront.conv2d"(%462){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%464="ufront.batchnorm"(%463){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%465="ufront.sigmoid"(%464):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%466="ufront.multiply"(%464, %465):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%467="ufront.pool2d"(%466){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%468="ufront.conv2d"(%467){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%469="ufront.sigmoid"(%468):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%470="ufront.multiply"(%468, %469):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%471="ufront.conv2d"(%470){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%472="ufront.sigmoid"(%471):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%473="ufront.multiply"(%472, %466):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%474="ufront.conv2d"(%473){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%475="ufront.batchnorm"(%474){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%476="ufront.divide"(%18){scalar=0.8550000190734863}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%477="ufront.multiply"(%475, %476):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%478="ufront.add"(%477, %458):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%479="ufront.conv2d"(%478){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%480="ufront.batchnorm"(%479){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%481="ufront.sigmoid"(%480):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%482="ufront.multiply"(%480, %481):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%483="ufront.conv2d"(%482){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%484="ufront.batchnorm"(%483){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%485="ufront.sigmoid"(%484):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%486="ufront.multiply"(%484, %485):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%487="ufront.pool2d"(%486){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%488="ufront.conv2d"(%487){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%489="ufront.sigmoid"(%488):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%490="ufront.multiply"(%488, %489):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%491="ufront.conv2d"(%490){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%492="ufront.sigmoid"(%491):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%493="ufront.multiply"(%492, %486):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%494="ufront.conv2d"(%493){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%495="ufront.batchnorm"(%494){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%496="ufront.divide"(%18){scalar=0.8500000238418579}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%497="ufront.multiply"(%495, %496):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%498="ufront.add"(%497, %478):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%499="ufront.conv2d"(%498){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%500="ufront.batchnorm"(%499){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%501="ufront.sigmoid"(%500):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%502="ufront.multiply"(%500, %501):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%503="ufront.conv2d"(%502){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%504="ufront.batchnorm"(%503){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%505="ufront.sigmoid"(%504):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%506="ufront.multiply"(%504, %505):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%507="ufront.pool2d"(%506){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%508="ufront.conv2d"(%507){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%509="ufront.sigmoid"(%508):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%510="ufront.multiply"(%508, %509):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%511="ufront.conv2d"(%510){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%512="ufront.sigmoid"(%511):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%513="ufront.multiply"(%512, %506):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%514="ufront.conv2d"(%513){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%515="ufront.batchnorm"(%514){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%516="ufront.divide"(%18){scalar=0.8450000286102295}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%517="ufront.multiply"(%515, %516):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%518="ufront.add"(%517, %498):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%519="ufront.conv2d"(%518){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%520="ufront.batchnorm"(%519){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%521="ufront.sigmoid"(%520):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%522="ufront.multiply"(%520, %521):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%523="ufront.conv2d"(%522){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%524="ufront.batchnorm"(%523){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%525="ufront.sigmoid"(%524):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%526="ufront.multiply"(%524, %525):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%527="ufront.pool2d"(%526){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%528="ufront.conv2d"(%527){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%529="ufront.sigmoid"(%528):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%530="ufront.multiply"(%528, %529):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%531="ufront.conv2d"(%530){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%532="ufront.sigmoid"(%531):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%533="ufront.multiply"(%532, %526):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%534="ufront.conv2d"(%533){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%535="ufront.batchnorm"(%534){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%536="ufront.divide"(%18){scalar=0.8399999737739563}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%537="ufront.multiply"(%535, %536):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%538="ufront.add"(%537, %518):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%539="ufront.conv2d"(%538){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%540="ufront.batchnorm"(%539){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%541="ufront.sigmoid"(%540):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%542="ufront.multiply"(%540, %541):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%543="ufront.conv2d"(%542){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%544="ufront.batchnorm"(%543){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%545="ufront.sigmoid"(%544):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%546="ufront.multiply"(%544, %545):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%547="ufront.pool2d"(%546){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%548="ufront.conv2d"(%547){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%549="ufront.sigmoid"(%548):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%550="ufront.multiply"(%548, %549):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%551="ufront.conv2d"(%550){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%552="ufront.sigmoid"(%551):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%553="ufront.multiply"(%552, %546):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%554="ufront.conv2d"(%553){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%555="ufront.batchnorm"(%554){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%556="ufront.divide"(%18){scalar=0.8349999785423279}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%557="ufront.multiply"(%555, %556):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%558="ufront.add"(%557, %538):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%559="ufront.conv2d"(%558){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%560="ufront.batchnorm"(%559){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%561="ufront.sigmoid"(%560):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%562="ufront.multiply"(%560, %561):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%563="ufront.conv2d"(%562){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%564="ufront.batchnorm"(%563){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%565="ufront.sigmoid"(%564):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%566="ufront.multiply"(%564, %565):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%567="ufront.pool2d"(%566){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%568="ufront.conv2d"(%567){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%569="ufront.sigmoid"(%568):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%570="ufront.multiply"(%568, %569):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%571="ufront.conv2d"(%570){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%572="ufront.sigmoid"(%571):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%573="ufront.multiply"(%572, %566):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%574="ufront.conv2d"(%573){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%575="ufront.batchnorm"(%574){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%576="ufront.divide"(%18){scalar=0.8299999833106995}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%577="ufront.multiply"(%575, %576):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%578="ufront.add"(%577, %558):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%579="ufront.conv2d"(%578){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%580="ufront.batchnorm"(%579){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%581="ufront.sigmoid"(%580):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%582="ufront.multiply"(%580, %581):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%583="ufront.conv2d"(%582){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%584="ufront.batchnorm"(%583){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%585="ufront.sigmoid"(%584):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%586="ufront.multiply"(%584, %585):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%587="ufront.pool2d"(%586){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%588="ufront.conv2d"(%587){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%589="ufront.sigmoid"(%588):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%590="ufront.multiply"(%588, %589):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%591="ufront.conv2d"(%590){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%592="ufront.sigmoid"(%591):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%593="ufront.multiply"(%592, %586):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%594="ufront.conv2d"(%593){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%595="ufront.batchnorm"(%594){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%596="ufront.divide"(%18){scalar=0.824999988079071}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%597="ufront.multiply"(%595, %596):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%598="ufront.add"(%597, %578):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%599="ufront.conv2d"(%598){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%600="ufront.batchnorm"(%599){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%601="ufront.sigmoid"(%600):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%602="ufront.multiply"(%600, %601):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%603="ufront.conv2d"(%602){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%604="ufront.batchnorm"(%603){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%605="ufront.sigmoid"(%604):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%606="ufront.multiply"(%604, %605):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%607="ufront.pool2d"(%606){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%608="ufront.conv2d"(%607){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%609="ufront.sigmoid"(%608):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%610="ufront.multiply"(%608, %609):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%611="ufront.conv2d"(%610){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%612="ufront.sigmoid"(%611):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%613="ufront.multiply"(%612, %606):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%614="ufront.conv2d"(%613){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%615="ufront.batchnorm"(%614){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%616="ufront.divide"(%18){scalar=0.8199999928474426}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%617="ufront.multiply"(%615, %616):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%618="ufront.add"(%617, %598):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%619="ufront.conv2d"(%618){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%620="ufront.batchnorm"(%619){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%621="ufront.sigmoid"(%620):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%622="ufront.multiply"(%620, %621):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%623="ufront.conv2d"(%622){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%624="ufront.batchnorm"(%623){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%625="ufront.sigmoid"(%624):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%626="ufront.multiply"(%624, %625):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%627="ufront.pool2d"(%626){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%628="ufront.conv2d"(%627){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%629="ufront.sigmoid"(%628):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%630="ufront.multiply"(%628, %629):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%631="ufront.conv2d"(%630){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%632="ufront.sigmoid"(%631):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%633="ufront.multiply"(%632, %626):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%634="ufront.conv2d"(%633){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%635="ufront.batchnorm"(%634){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%636="ufront.divide"(%18){scalar=0.8149999976158142}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%637="ufront.multiply"(%635, %636):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%638="ufront.add"(%637, %618):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%639="ufront.conv2d"(%638){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%640="ufront.batchnorm"(%639){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%641="ufront.sigmoid"(%640):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%642="ufront.multiply"(%640, %641):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%643="ufront.conv2d"(%642){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%644="ufront.batchnorm"(%643){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%645="ufront.sigmoid"(%644):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%646="ufront.multiply"(%644, %645):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%647="ufront.pool2d"(%646){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%648="ufront.conv2d"(%647){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%649="ufront.sigmoid"(%648):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%650="ufront.multiply"(%648, %649):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%651="ufront.conv2d"(%650){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%652="ufront.sigmoid"(%651):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%653="ufront.multiply"(%652, %646):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%654="ufront.conv2d"(%653){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%655="ufront.batchnorm"(%654){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%656="ufront.divide"(%18){scalar=0.8100000023841858}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%657="ufront.multiply"(%655, %656):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%658="ufront.add"(%657, %638):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%659="ufront.conv2d"(%658){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%660="ufront.batchnorm"(%659){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%661="ufront.sigmoid"(%660):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%662="ufront.multiply"(%660, %661):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%663="ufront.conv2d"(%662){groups=1536, kernel=[3, 3], pad=[1, 1], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%664="ufront.batchnorm"(%663){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%665="ufront.sigmoid"(%664):(tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%666="ufront.multiply"(%664, %665):(tensor<1x1536x7x7xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%667="ufront.pool2d"(%666){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x1536x1x1xf32>
+	%668="ufront.conv2d"(%667){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%669="ufront.sigmoid"(%668):(tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%670="ufront.multiply"(%668, %669):(tensor<1x64x1x1xf32>, tensor<1x64x1x1xf32>) -> tensor<1x64x1x1xf32>
+	%671="ufront.conv2d"(%670){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x64x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%672="ufront.sigmoid"(%671):(tensor<1x1536x1x1xf32>) -> tensor<1x1536x1x1xf32>
+	%673="ufront.multiply"(%672, %666):(tensor<1x1536x1x1xf32>, tensor<1x1536x7x7xf32>) -> tensor<1x1536x7x7xf32>
+	%674="ufront.conv2d"(%673){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x1536x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%675="ufront.batchnorm"(%674){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%676="ufront.divide"(%18){scalar=0.8050000071525574}:(tensor<1x1x1x1xf32>) -> tensor<1x1x1x1xf32>
+	%677="ufront.multiply"(%675, %676):(tensor<1x256x7x7xf32>, tensor<1x1x1x1xf32>) -> tensor<1x256x7x7xf32>
+	%678="ufront.add"(%677, %658):(tensor<1x256x7x7xf32>, tensor<1x256x7x7xf32>) -> tensor<1x256x7x7xf32>
+	%679="ufront.conv2d"(%678){groups=1, kernel=[1, 1], pad=[0, 0], stride=[1, 1]}:(tensor<1x256x7x7xf32>) -> tensor<1x1280x7x7xf32>
+	%680="ufront.batchnorm"(%679){affine=true, eps=0.001, momentum=0.8999999761581421, track_running_stats=true}:(tensor<1x1280x7x7xf32>) -> tensor<1x1280x7x7xf32>
+	%681="ufront.sigmoid"(%680):(tensor<1x1280x7x7xf32>) -> tensor<1x1280x7x7xf32>
+	%682="ufront.multiply"(%680, %681):(tensor<1x1280x7x7xf32>, tensor<1x1280x7x7xf32>) -> tensor<1x1280x7x7xf32>
+	%683="ufront.pool2d"(%682){output_size=[1, 1], pad=[0, 0], pool_type="POOL_ADAPTIVE", stride=[1, 1]}:(tensor<1x1280x7x7xf32>) -> tensor<1x1280x1x1xf32>
+	%684="ufront.flat"(%683){end_dim=-1, start_dim=1}:(tensor<1x1280x1x1xf32>) -> tensor<1x1280xf32>
+	%685="ufront.dropout"(%684){rate=0.20000000298023224, seed=0}:(tensor<1x1280xf32>) -> tensor<1x1280xf32>
+	%686="ufront.linear"(%685):(tensor<1x1280xf32>) -> tensor<1x1000xf32>
+	%687="ufront.softmax"(%686):(tensor<1x1000xf32>) -> tensor<1x1000xf32>
+	return %687: tensor<1x1000xf32>
+}

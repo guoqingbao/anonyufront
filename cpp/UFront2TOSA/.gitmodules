@@ -1,0 +1,7 @@
+[submodule "third-party/cnpy"]
+	path = third-party/cnpy
+	url = https://github.com/rogersce/cnpy.git
+# [submodule "third-party/numcpp"]
+# 	path = third-party/numcpp
+# 	url = https://github.com/dpilger26/NumCpp.git
+	
