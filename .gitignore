@@ -1,5 +1,10 @@
 /target
-
+/cpp
+/python
+/rawapi
+/src
+/.github
+.gitmodules
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .pytest_cache/
@@ -78,6 +83,7 @@ docs/_build/
 *.compiler
 .onnx/
 test.py
-*.whl
+# *.whl
 examples/llm.py
 examples/output_ir/torch_chatglm-6b.ir
+DockerFile
