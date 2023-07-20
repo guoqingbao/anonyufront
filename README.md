@@ -2,13 +2,15 @@
 Unified Computing Frontend for Deep Learning 
 
 ## How it works?
-Convert Pytorch, Tensorflow, Keras, ONNX models to UFront IR and then lower them into standard MLIR dialect (TOSA IR)
+Convert Pytorch, Tensorflow, Keras, ONNX models to UFront IR and then lower them into standard MLIR dialect (e.g., TOSA IR)
 
 ## For Conference Reproducibility
 #### Install pre-build ufront package
 In Ubuntu 20.04 or 22.04, download corresponding ufront package in the release folder and install.
 
 ```sh
+pip install ufront-0.1.1-cp37-cp37m-manylinux_2_28_x86_64.whl #for Python3.7
+
 pip install ufront-0.1.1-cp38-cp38-manylinux_2_28_x86_64.whl #for Python3.8
 
 pip install ufront-0.1.1-cp39-cp39-manylinux_2_28_x86_64.whl #for Python3.9
@@ -37,13 +39,16 @@ python examples/torch_e2e_demo.py
 ```
 The following results should be reproduced:
 
-Pytorch:  [('n02099712', 'Labrador_retriever', 0.7244003), ('n02091831', 'Saluki', 0.13146894), ('n02099601', 'golden_retriever', 0.04318187), ('n02087394', 'Rhodesian_ridgeback', 0.020887861), ('n02092339', 'Weimaraner', 0.013975109)]
+ONNX Runtime:  [[('n02099712', 'Labrador_retriever', 0.61181027), ('n02091831', 'Saluki', 0.22184308), ('n02087394', 'Rhodesian_ridgeback', 0.03912668), ('n02092339', 'Weimaraner', 0.026891246), ('n02109047', 'Great_Dane', 0.019160295)], [('n02099712', 'Labrador_retriever', 0.61181027), ('n02091831', 'Saluki', 0.22184308), ('n02087394', 'Rhodesian_ridgeback', 0.03912668), ('n02092339', 'Weimaraner', 0.026891246), ('n02109047', 'Great_Dane', 0.019160295)]]
+
+Pytorch:  [[('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554), ('n02092339', 'Weimaraner', 0.02689132), ('n02109047', 'Great_Dane', 0.0191598)], [('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554), ('n02092339', 'Weimaraner', 0.02689132), ('n02109047', 'Great_Dane', 0.0191598)]]
 
 Compiling TOSA model...
+UFront:  [[('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663), ('n02092339', 'Weimaraner', 0.02689206), ('n02109047', 'Great_Dane', 0.019160429)], [('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663), ('n02092339', 'Weimaraner', 0.02689206), ('n02109047', 'Great_Dane', 0.019160429)]]
 
-UFront:  [('n02099712', 'Labrador_retriever', 0.72440577), ('n02091831', 'Saluki', 0.13146713), ('n02099601', 'golden_retriever', 0.043180563), ('n02087394', 'Rhodesian_ridgeback', 0.020887945), ('n02092339', 'Weimaraner', 0.01397502)]
+Model:  MobileNetV3 , MAE with Pytorch:  5.4389266e-09
 
-Model:  MobileNetV3 , MAE:  9.8586455e-09
+Model:  MobileNetV3 , MAE with ONNXRuntime:  4.557022e-09
 
 #### Commet and uncommet code for other models
 in examples/torch_e2e_demo.py, change to other models, e.g., vision_transformer,
@@ -59,8 +64,8 @@ note: weight download will take some time
     # net = models.vision_transformer.vit_b_16(weights=True) 
 ```
 
-#### Change to GPU execution
-Note: you need Nvidia GPU, driver and CUDA installed
+#### Switch execution between CPU and GPU
+Note: you need Nvidia GPU, driver and CUDA installed for GPU execution
 ``` python
-GPU = False #change this to True
+GPU = False #change this to True for GPU execution
 ```
