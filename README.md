@@ -8,6 +8,7 @@ Convert Pytorch, Tensorflow, Keras, ONNX models to UFront IR and then lower them
 #### Install pre-build ufront package
 In Ubuntu 20.04 or 22.04, download corresponding ufront package in the release folder and install.
 
+Install any of the following packages according to your default Python version.
 ```sh
 pip install ufront-0.1.1-cp37-cp37m-manylinux_2_28_x86_64.whl #for Python3.7
 
@@ -39,29 +40,26 @@ python examples/torch_e2e_demo.py
 ```
 The following results should be reproduced:
 
-ONNX Runtime:  [[('n02099712', 'Labrador_retriever', 0.61181027), ('n02091831', 'Saluki', 0.22184308), ('n02087394', 'Rhodesian_ridgeback', 0.03912668), ('n02092339', 'Weimaraner', 0.026891246), ('n02109047', 'Great_Dane', 0.019160295)], [('n02099712', 'Labrador_retriever', 0.61181027), ('n02091831', 'Saluki', 0.22184308), ('n02087394', 'Rhodesian_ridgeback', 0.03912668), ('n02092339', 'Weimaraner', 0.026891246), ('n02109047', 'Great_Dane', 0.019160295)]]
-
-Pytorch:  [[('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554), ('n02092339', 'Weimaraner', 0.02689132), ('n02109047', 'Great_Dane', 0.0191598)], [('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554), ('n02092339', 'Weimaraner', 0.02689132), ('n02109047', 'Great_Dane', 0.0191598)]]
+Pytorch:  [[('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554)], [('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554)]]
 
 Compiling TOSA model...
-UFront:  [[('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663), ('n02092339', 'Weimaraner', 0.02689206), ('n02109047', 'Great_Dane', 0.019160429)], [('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663), ('n02092339', 'Weimaraner', 0.02689206), ('n02109047', 'Great_Dane', 0.019160429)]]
+
+UFront:  [[('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663)], [('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663)]]
 
 Model:  MobileNetV3 , MAE with Pytorch:  5.4389266e-09
-
-Model:  MobileNetV3 , MAE with ONNXRuntime:  4.557022e-09
 
 #### Commet and uncommet code for other models
 in examples/torch_e2e_demo.py, change to other models, e.g., vision_transformer,
 note: weight download will take some time
 ``` python
-    # net = resnet18(pretrained=True)
-    # net = resnet50(pretrained=True)
-    # net = densenet121(pretrained=True)
-    # net = inception_v3(pretrained=True) 
-    # net = squeezenet1_1(pretrained=True)
-    # net = shufflenet_v2_x1_5(pretrained=True)
-    net = mobilenet_v3_small(pretrained=True, dropout=0.0)
-    # net = models.vision_transformer.vit_b_16(weights=True) 
+    # net = resnet18(weights="DEFAULT")
+    # net = resnet50(weights="DEFAULT")
+    # net = densenet121(weights="DEFAULT")
+    # net = inception_v3(weights="DEFAULT", dropout=0.0) 
+    # net = squeezenet1_1(weights="DEFAULT")
+    # net = shufflenet_v2_x1_5(weights="DEFAULT")
+    net = mobilenet_v3_small(weights="DEFAULT", dropout=0.0)
+    # net = models.vision_transformer.vit_b_16(weights="DEFAULT") 
 ```
 
 #### Switch execution between CPU and GPU

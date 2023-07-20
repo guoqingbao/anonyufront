@@ -9,7 +9,7 @@ from iree.compiler import tools
 from iree import runtime
 from torch.onnx import TrainingMode
 import io
-import onnxruntime
+# import onnxruntime
 from urllib.request import urlopen
 import json
 from PIL import Image
@@ -23,7 +23,7 @@ def load_read_image():
     clast_image = image/ 255.0
     return clast_image, np.moveaxis(clast_image, -1, 1)
 
-def decode_result(preds, top=5):
+def decode_result(preds, top=3):
     if len(preds.shape) != 2 or preds.shape[1] != 1000:
         raise ValueError(
             "`decode_predictions` expects "
@@ -59,15 +59,15 @@ if __name__ == "__main__":
     # net = models.vision_transformer.vit_b_16(weights="DEFAULT") 
     net.eval()
 
-    f = io.BytesIO()
-    torch.onnx.export(model=net, args=(torch.from_numpy(input)), f=f, export_params=True, do_constant_folding=False,
-                      training=TrainingMode.EVAL, opset_version=17)
+    # f = io.BytesIO()
+    # torch.onnx.export(model=net, args=(torch.from_numpy(input)), f=f, export_params=True, do_constant_folding=False,
+    #                   training=TrainingMode.EVAL, opset_version=17)
 
-    ort_session = onnxruntime.InferenceSession(f.getvalue())  
+    # ort_session = onnxruntime.InferenceSession(f.getvalue())  
     
-    ort_output = ort_session.run(None, {ort_session._inputs_meta[0].name: input} )[0]
-    ort_output = torch.softmax(torch.Tensor(ort_output), dim=1).detach().numpy()
-    print("ONNX Runtime: ", decode_result(ort_output))
+    # ort_output = ort_session.run(None, {ort_session._inputs_meta[0].name: input} )[0]
+    # ort_output = torch.softmax(torch.Tensor(ort_output), dim=1).detach().numpy()
+    # print("ONNX Runtime: ", decode_result(ort_output))
 
     modelname = net.__class__.__name__
     
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     mae = np.mean(abs(dif))
     print("Model: ", modelname, ", MAE with Pytorch: ", mae)
 
-    dif = ort_output - ufront_ret
-    mae = np.mean(abs(dif))
-    print("Model: ", modelname, ", MAE with ONNXRuntime: ", mae)
+    # dif = ort_output - ufront_ret
+    # mae = np.mean(abs(dif))
+    # print("Model: ", modelname, ", MAE with ONNXRuntime: ", mae)
     
