@@ -69,16 +69,19 @@ GPU = False #change this to True for GPU execution
 ```
 
 ### ImageNet inference with UFront on Kaggle
-Run the ImageNet-1k inference online with UFront, be sure to login to use free GPU resources.
+Run the ImageNet-1k inference online with UFront, **be sure to login** to use full functionality and free GPU resources.
 
-https://www.kaggle.com/code/bobking/imagenet-inference
+https://www.kaggle.com/code/anomyuser/imagenet-inference
+
+**Important: Access GPU at no cost or turn on an internet connection**. Need to login and **Get phone verified** in Kaggle.
+
+**The Internet Connection need to be turned on in the Kaggle notebook to allow package download.**
 
 ### ImageNet inference with UFront locally
 
-1) Download ImageNet validation set (about 2GB) from kaggle.com and extract it to a local folder
-   https://www.kaggle.com/datasets/sautkin/imagenet1kvalid
+1) Download ImageNet validation set (about 2GB, named "imagenet1kvalid") from kaggle.com and extract it to a local folder
 
-2) In the example/imagenet_inference.ipynb (jupyter notebook), change the root path to the parent folder of "imagenet1kvalid", execute notebook cells (assume you have install ufront package and IREE backend).
+2) In the example/imagenet_inference.ipynb (jupyter notebook), change the root path to the parent folder of "imagenet1kvalid", execute all notebook cells (depend on your local Python version, you may install different UFront packages).
 
 
 
