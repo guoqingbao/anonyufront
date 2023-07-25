@@ -40,13 +40,13 @@ python examples/torch_e2e_demo.py
 ```
 The following results should be reproduced:
 
-Pytorch:  [[('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554)], [('n02099712', 'Labrador_retriever', 0.61181074), ('n02091831', 'Saluki', 0.22184515), ('n02087394', 'Rhodesian_ridgeback', 0.039125554)]]
+Pytorch:  [[('n02099712', 'Labrador_retriever', 0.60195434), ('n02091831', 'Saluki', 0.22342004), ('n02099601', 'golden_retriever', 0.11305459)], [('n02099712', 'Labrador_retriever', 0.60195434), ('n02091831', 'Saluki', 0.22342004), ('n02099601', 'golden_retriever', 0.11305459)]]
 
 Compiling TOSA model...
 
-UFront:  [[('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663)], [('n02099712', 'Labrador_retriever', 0.61180955), ('n02091831', 'Saluki', 0.22184528), ('n02087394', 'Rhodesian_ridgeback', 0.03912663)]]
+UFront:  [[('n02099712', 'Labrador_retriever', 0.6019566), ('n02091831', 'Saluki', 0.22341833), ('n02099601', 'golden_retriever', 0.113055184)], [('n02099712', 'Labrador_retriever', 0.6019566), ('n02091831', 'Saluki', 0.22341833), ('n02099601', 'golden_retriever', 0.113055184)]]
 
-Model:  MobileNetV3 , MAE with Pytorch:  5.4389266e-09
+Model:  MobileNetV3 , MAE with Pytorch:  4.8838333e-09
 
 #### Commet and uncommet code for other models
 in examples/torch_e2e_demo.py, change to other models, e.g., vision_transformer,
@@ -67,3 +67,20 @@ Note: you need Nvidia GPU, driver and CUDA installed for GPU execution
 ``` python
 GPU = False #change this to True for GPU execution
 ```
+
+### ImageNet inference with UFront on Kaggle
+Run the ImageNet-1k inference online with UFront, be sure to login to use free GPU resources.
+
+https://www.kaggle.com/code/bobking/imagenet-inference
+
+### ImageNet inference with UFront locally
+
+1) Download ImageNet validation set (about 2GB) from kaggle.com and extract it to a local folder
+   https://www.kaggle.com/datasets/sautkin/imagenet1kvalid
+
+2) In the example/imagenet_inference.ipynb (jupyter notebook), change the root path to the parent folder of "imagenet1kvalid", execute notebook cells (assume you have install ufront package and IREE backend).
+
+
+
+
+

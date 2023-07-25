@@ -20,7 +20,11 @@ def load_read_image():
     img = Image.open(io.BytesIO(response.read()))
     image = np.array(img.resize((224, 224)), dtype=np.float32)
     image = image[np.newaxis, :]
+    mean = (0.485, 0.456, 0.406)
+    std = (0.229, 0.224, 0.225)
     clast_image = image/ 255.0
+    clast_image = (clast_image - mean) / std #normlization 
+    clast_image = clast_image.astype(np.float32)
     return clast_image, np.moveaxis(clast_image, -1, 1)
 
 def decode_result(preds, top=3):
