@@ -3,7 +3,6 @@ import numpy as np
 from torchvision.models import resnet18, resnet50, squeezenet1_1, regnet_x_32gf, maxvit_t, shufflenet_v2_x1_5, inception_v3, mobilenet_v3_small, efficientnet_v2_s, densenet121, convnext_small
 import torchvision.models as models
 from ufront.pytorch.model import UFrontTorch 
-# pip install iree-compiler iree-runtime iree-tools-tf -f https://openxla.github.io/iree/pip-release-links.html
 import iree.compiler as ireec
 from iree.compiler import tools
 from iree import runtime

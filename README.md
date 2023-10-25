@@ -1,10 +1,10 @@
 # ufront
-Unified Computing Frontend for Deep Learning 
+Unified MLIR Frontend for Deep Learning 
 
 ## How it works?
 Convert Pytorch, Tensorflow, Keras, ONNX models to UFront IR and then lower them into standard MLIR dialect (e.g., TOSA IR)
 
-## For Conference Reproducibility
+## For Reproducibility
 #### Install pre-build ufront package
 In Ubuntu 20.04 or 22.04, download corresponding ufront package in the release folder and install.
 
@@ -17,11 +17,13 @@ pip install ufront-0.1.1-cp38-cp38-manylinux_2_28_x86_64.whl #for Python3.8
 pip install ufront-0.1.1-cp39-cp39-manylinux_2_28_x86_64.whl #for Python3.9
 
 pip install ufront-0.1.1-cp310-cp310-manylinux_2_28_x86_64.whl #for Python3.10
+
+pip install ufront-0.1.1-cp311-cp311-manylinux_2_28_x86_64.whl #for Python3.11
 ```
 
 #### Install Execution Backend (IREE)
 ```sh
-pip install iree-compiler==20230326.470 iree-runtime==20230326.470 -f https://openxla.github.io/iree/pip-release-links.html
+pip install iree-compiler==20230512.517 iree-runtime==20230512.517 -f https://openxla.github.io/iree/pip-release-links.html
 ```
 
 #### Install Pytorch-cpu, Tensorflow-cpu (optional, for compiling pytorch and tensorflow models)
@@ -60,6 +62,7 @@ note: weight download will take some time
     # net = shufflenet_v2_x1_5(weights="DEFAULT")
     net = mobilenet_v3_small(weights="DEFAULT", dropout=0.0)
     # net = models.vision_transformer.vit_b_16(weights="DEFAULT") 
+    # net = BertModel() #refer to bert_test.py
 ```
 
 #### Switch execution between CPU and GPU
