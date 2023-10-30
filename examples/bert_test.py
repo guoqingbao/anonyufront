@@ -61,6 +61,7 @@ t2_stop = time.perf_counter()
 
 print("Bert****Ufront->TOSA Time: {:.3f}s, TOSA->Binary Time: {:.3f}s, Total Time: {:.3f}s".format(t1_stop - t1_start, t2_stop - t1_stop, t2_stop - t1_start)) # print performance indicator
 
-ufront_ret = module.forward(input_ids, token_type_ids, input_mask).to_host()
+ufront_ret = module.forward(input_ids, token_type_ids, input_mask)
 
-print(ufront_ret)
+for ret in ufront_ret:
+    print(ret.to_host())
