@@ -1,7 +1,6 @@
 from tensorflow.keras import backend
 from ufront.keras.model import UFrontKeras
 from keras_def import SequentialCNN, ConcatenatedCNN, NestedCNN, ShuffleNet, SqueezeNet_11, ResNet18
-
 from tensorflow.keras.applications import ResNet50, ResNet50V2, EfficientNetB0, Xception, MobileNetV2, MobileNetV3Small, DenseNet121, InceptionV3, VGG16
 from tensorflow.keras import layers
 from tensorflow.keras.models import Model
@@ -10,27 +9,16 @@ import numpy as np
 import iree.compiler as ireec
 from iree import runtime
 import tensorflow as tf
-import onnx
-import io
+import torch
+from torch_def import mae, mse, r_square, rmse, mpe, load_sample_image
 
 def decode_result(result):
   return tf.keras.applications.resnet50.decode_predictions(result, top=5)[0]
     
-def load_read_image():
-    content_path = tf.keras.utils.get_file(
-    'YellowLabradorLooking_new.jpg',
-    'https://storage.googleapis.com/download.tensorflow.org/example_images/YellowLabradorLooking_new.jpg')
-
-    image = tf.io.read_file(content_path)
-    image = tf.image.decode_image(image, channels=3)
-    image = tf.image.resize(image, (224, 224))
-    image = image[tf.newaxis, :]
-    clast_image = image.numpy()/ 255.0
-    return clast_image, np.moveaxis(clast_image, -1, 1)
 
 if __name__ == "__main__":
-    GPU = False
-    input_last, input = load_read_image()
+    GPU = True
+    input_last, input = load_sample_image()
     backend.set_image_data_format('channels_first')
     tf.keras.backend.set_floatx('float32')
     # backend.set_image_data_format('channels_last')
@@ -90,13 +78,6 @@ if __name__ == "__main__":
     # f.close()
     
 
-    # import onnxruntime
-    # f = io.BytesIO()
-    # onnx.save_model(model.get_onnx_format_model(), f)
-    # ort_session = onnxruntime.InferenceSession(f.getvalue())  
-    # ort_output = ort_session.run(None, {ort_session._inputs_meta[0].name: input} )[0]
-    # print("ONNX Runtime: ", decode_result(ort_output))
-
 
     print("Compiling TOSA model...")
     if GPU:
@@ -112,7 +93,8 @@ if __name__ == "__main__":
 
     ufront_ret = module.forward(input).to_host()
     print("\nUFront: ", decode_result(ufront_ret))
-
+    
+    # make sure weight consistent for comparison
     backend.set_image_data_format('channels_last')
     sp = tuple(list(input.shape[2:]) + [3])
     # base_model = ResNet50(weights=None, include_top=True)
@@ -132,3 +114,6 @@ if __name__ == "__main__":
     dif = ufront_ret - ret
     mae = np.mean(abs(dif))
     print("Model: ", model_name, ", MAE with Tensorflow: ", mae)
+    print("RMSE:", rmse(torch.Tensor(ret), torch.Tensor(ufront_ret)).numpy())
+    print("COD:", r_square(torch.Tensor(ret), torch.Tensor(ufront_ret)).numpy())
+    print("MPE:", mpe(torch.Tensor(ret), torch.Tensor(ufront_ret)).numpy(), "%")

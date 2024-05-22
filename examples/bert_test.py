@@ -1,3 +1,4 @@
+# import torch, torchtext
 from ufront.pytorch.model import UFrontTorch 
 import iree.compiler as ireec
 from iree import runtime
@@ -5,9 +6,9 @@ from torch_bert import BertModel, BertConfig
 import torch
 import time
 import numpy as np
+from torch_def import mae, mse, r_square, rmse, mpe
 
 GPU = False
-
 input_ids = torch.from_numpy(np.array([[31, 51, 99], [15, 5, 0]], dtype="int32"))
 input_mask = torch.from_numpy(np.array([[1, 1, 1], [1, 1, 0]], dtype="int32"))
 token_type_ids = torch.from_numpy(np.array([[0, 0, 1], [0, 1, 0]], dtype="int32"))
@@ -18,9 +19,16 @@ config = BertConfig(vocab_size_or_config_json_file=16000, hidden_size=768,
 net = BertModel(config=config)
 net.eval()
 
+# torch_origin_ret = net(input_ids, token_type_ids, input_mask)[1].detach().numpy()
+t_ret = net(input_ids, token_type_ids, input_mask)
+
+torch_ret = []
+torch_ret.append(t_ret[0].detach().numpy()) #prediction results
+torch_ret.append(t_ret[1].detach().numpy()) #prediction results
+
+# all_encoder_layers, pooled_output = net(input_ids, token_type_ids, input_mask)
 t1_start = time.perf_counter()
 model = UFrontTorch(net, batch_size=1, pass_weights=True) # convert torch model to ufront model
-
 #This will trigger Rust frontend for actual model conversion and graph building
 #operators can also be managed by python side (each operator here corresponding to an operator in the Rust computation graph)
 output_tensors = model(inputs = [input_ids, token_type_ids, input_mask])
@@ -61,7 +69,14 @@ t2_stop = time.perf_counter()
 
 print("Bert****Ufront->TOSA Time: {:.3f}s, TOSA->Binary Time: {:.3f}s, Total Time: {:.3f}s".format(t1_stop - t1_start, t2_stop - t1_stop, t2_stop - t1_start)) # print performance indicator
 
-ufront_ret = module.forward(input_ids, token_type_ids, input_mask)
+module_ret = module.forward(input_ids, token_type_ids, input_mask)
+ufront_ret = []
+for ret in module_ret:
+    ufront_ret.append(ret.to_host())
 
-for ret in ufront_ret:
-    print(ret.to_host())
+dif = torch_ret[1] - ufront_ret[1]
+mae = np.mean(abs(dif))
+print("MAE: ", mae)
+print("RMSE:", rmse(torch.Tensor(torch_ret[1]), torch.Tensor(ufront_ret[1])).numpy())
+print("COD:", r_square(torch.Tensor(torch_ret[1]), torch.Tensor(ufront_ret[1])).numpy())
+print("MPE:", mpe(torch.Tensor(torch_ret[1]), torch.Tensor(ufront_ret[1])).numpy(), "%")
