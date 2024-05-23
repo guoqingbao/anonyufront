@@ -1,8 +1,57 @@
 # UFront
 Unified MLIR Frontend for Deep Learning 
 
-# For Reproducibility
-## Install pre-build ufront package
+## How to reproduce the results
+### Option 1 (recommended):
+
+Experiencing UFront on Kaggle (for model cmpilation, ImageNet inference, results comparison, etc.)
+
+Run the anonymous UFront test online in Kaggle using the link below, **be sure to login** to use full functionality and free GPU (T4x2) resources.
+
+https://www.kaggle.com/code/anomyuser/ufront-test/
+
+**Important: Access GPU at no cost or turn on an internet connection**. Need to login and **Get phone verified** in Kaggle.
+
+**The Internet Connection need to be turned on in the Kaggle notebook to allow package download.**
+
+### Option 2 (contains performance comparison on: CPU, RTX 3070, A100):
+Execute provided jupyter notebooks in the examples folder, be sure to install dependencies (see following guideline):
+```sh
+test_tf.ipynb
+
+test_torch.ipynb
+
+test_accuracy.ipynb
+
+test_tf_A100.ipynb (results on **NVidia A100**)
+
+test_torch_A100.ipynb (results on **NVidia A100**)
+
+```
+
+### Option 3 (suitable for debug):
+Execute python scripts, you may install corresponding dependencies manually.
+
+```sh
+python examples/torch_test.py
+python examples/bert_test.py
+python examples/lstm_test.py
+python examples/keras_test.py
+python examples/onnx_test.py
+```
+
+
+### Option 4
+
+ImageNet inference with UFront locally
+
+1) Download ImageNet validation set (about 2GB, named "imagenet1kvalid") from kaggle.com and extract it to a local folder
+
+2) In the example/test_accuracy.ipynb (jupyter notebook), change the root path to the parent folder of "imagenet1kvalid", execute all notebook cells (depend on your local Python version, you may install different UFront packages).
+   
+
+## Examples' dependencies
+### Install pre-build ufront package
 In Ubuntu 20.04 or 22.04, download corresponding ufront package in the release folder and install.
 
 Install any of the following packages according to your default Python version.
@@ -18,7 +67,7 @@ pip install ufront-0.1.1-cp310-cp310-manylinux_2_28_x86_64.whl #for Python3.10
 pip install ufront-0.1.1-cp311-cp311-manylinux_2_28_x86_64.whl #for Python3.11
 ```
 
-## Install Execution Backend (IREE)
+### Install Execution Backend (IREE)
 Recommended stable IREE
 
 ```sh
@@ -32,53 +81,6 @@ For older Python like Python3.7 you may install previous iree because recent ire
 ```
 
 For CUDA 12+, you may install newer IREE (see trouble shootings).
-
-## Reproduce the results
-### Option 1 (recommended):
-Execute provided jupyter notebooks:
-```sh
-test_tf.ipynb
-
-test_torch.ipynb
-
-test_accuracy.ipynb
-
-```
-test_tf_A100.ipynb (contain supplementary results on **NVidia A100**)
-
-test_torch_A100.ipynb (contain supplementary results on **NVidia A100**)
-
-### Option 2:
-Execute python scripts, you may install corresponding dependencies manually.
-
-```sh
-python examples/torch_test.py
-python examples/bert_test.py
-python examples/lstm_test.py
-python examples/keras_test.py
-python examples/onnx_test.py
-```
-
-### Option 3
-
-Experiencing UFront on Kaggle (for ImageNet inference)
-
-Run the anonymous ImageNet-1k inference online with UFront, **be sure to login** to use full functionality and free GPU resources.
-
-https://www.kaggle.com/code/anomyuser/imagenet-inference
-
-**Important: Access GPU at no cost or turn on an internet connection**. Need to login and **Get phone verified** in Kaggle.
-
-**The Internet Connection need to be turned on in the Kaggle notebook to allow package download.**
-
-### Option 4
-
-ImageNet inference with UFront locally
-
-1) Download ImageNet validation set (about 2GB, named "imagenet1kvalid") from kaggle.com and extract it to a local folder
-
-2) In the example/test_accuracy.ipynb (jupyter notebook), change the root path to the parent folder of "imagenet1kvalid", execute all notebook cells (depend on your local Python version, you may install different UFront packages).
-   
 
 ## Trouble shootings
 
