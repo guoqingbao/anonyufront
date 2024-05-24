@@ -4,15 +4,21 @@ Unified MLIR Frontend for Deep Learning
 ## How to reproduce the results
 ### Option 1 (recommended):
 
-Experiencing UFront on Kaggle (for model cmpilation, ImageNet inference, results comparison, etc.)
+Experiencing UFront on Kaggle (for model compilation, performance comparison, ImageNet inference, accuracy validation, etc.)
 
-Run the anonymous UFront test online in Kaggle using the link below, **be sure to login** to use full functionality and free GPU (T4x2) resources.
+Run the anonymous UFront online tests in Kaggle using the links below, **be sure to login** to use full functionality and free GPU (T4x2) resources.
 
 https://www.kaggle.com/code/anomyuser/ufront-test/
 
-**Important: Access GPU at no cost or turn on an internet connection**. Need to login and **Get phone verified** in Kaggle.
+https://www.kaggle.com/code/anomyuser/test-torch
 
-**The Internet Connection need to be turned on in the Kaggle notebook to allow package download.**
+https://www.kaggle.com/code/anomyuser/test-tf
+
+**Note**: the results on Kaggle may slightly different from the paper reported because of different CPU and GPU used.
+
+**Important:** Access GPU at no cost or turn on an internet connection. Need to **login** and **Get phone verified** in Kaggle.
+
+**The Internet Connection** in the Kaggle notebook need to be **turned on** to allow package download.
 
 ### Option 2 (contains performance comparison on: CPU, RTX 3070, A100):
 Execute provided jupyter notebooks in the examples folder, be sure to install dependencies (see following guideline):
@@ -121,12 +127,18 @@ Torch-MLIR is bunded with torch (dev), to compile torch models using Torch-MLIR,
 
 IREE-TF and some Tensorflow models has the following dependencies
 ```sh
-!pip install tensorflow-cpu==2.13.0 
-!pip install tensorflow-addons
+!pip uninstall tensorflow -y
+!pip install tensorflow-cpu==2.13.0
+!pip install tensorflow-addons==0.21.0
 !pip install validators
 !pip install scipy
 !pip install opencv-python
 !apt install libgl1 -y
+```
+
+If you encouter problems for compiling models using IREE-TF, you may lower the IREE TF tools:
+```sh
+!pip install iree-tools-tf==20230524.529  iree-tools-tflite==20230524.529
 ```
 
 ONNX-MLIR on GPU? No official support yet.

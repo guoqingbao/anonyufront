@@ -217,7 +217,7 @@ class ArangeFx(torch.nn.Module):
         super().__init__()
         self._is_leaf_module = True
 
-    def forward(self, x, dtype, device):
+    def forward(self, x, dtype: torch.dtype, device: torch.device):
         return torch.arange(x, dtype=dtype, device=device)
     
 class BertEmbeddings(nn.Module):
