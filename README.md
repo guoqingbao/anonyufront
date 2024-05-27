@@ -29,10 +29,6 @@ test_torch.ipynb
 
 test_accuracy.ipynb
 
-test_tf_A100.ipynb (results on **NVidia A100**)
-
-test_torch_A100.ipynb (results on **NVidia A100**)
-
 ```
 
 ### Option 3 (suitable for debug):
@@ -75,18 +71,26 @@ pip install ufront-0.1.1-cp311-cp311-manylinux_2_28_x86_64.whl #for Python3.11
 
 ### Install Execution Backend (IREE)
 Recommended stable IREE
-
 ```sh
-!pip install iree-compiler==20230524.529 iree-runtime==20230524.529 
+pip install iree-compiler==20230524.529 iree-runtime==20230524.529 
 ```
+
+If you want to experience new features of Torch-MLIR (under Python 3.11 and CUDA 12), install: 
+```sh
+pip install iree_compiler==20240129.785 iree_runtime==20240129.785
+```
+
+If you want to experience IREE-TF, install:
+```sh
+pip install iree-compiler==20230815.614 iree-runtime==20230815.614
+```
+
 For older Python like Python3.7 you may install previous iree because recent iree release does not provide Python 3.7 support:
 ```sh
-!pip install iree-compiler==20230330.474 -f https://github.com/iree-org/iree/releases/download/candidate-20230330.474/iree_compiler-20230330.474-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+pip install iree-compiler==20230330.474 -f https://github.com/iree-org/iree/releases/download/candidate-20230330.474/iree_compiler-20230330.474-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 
-!pip iree-runtime==20230330.474 -f https://github.com/iree-org/iree/releases/download/candidate-20230330.474/iree_runtime-20230330.474-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+pip iree-runtime==20230330.474 -f https://github.com/iree-org/iree/releases/download/candidate-20230330.474/iree_runtime-20230330.474-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 ```
-
-For CUDA 12+, you may install newer IREE (see trouble shootings).
 
 ## Trouble shootings
 
@@ -100,12 +104,18 @@ RuntimeError: Error creating vm context with modules:main_checkout/runtime/src/i
 
 For **CUDA 11**, the stable IREE is:
 ```sh
-!pip install iree-compiler==20230524.529 iree-runtime==20230524.529 
+pip install iree-compiler==20230524.529 iree-runtime==20230524.529 
 ```
 
-For **CUDA 12**, the compatible IREE is:
+For **CUDA 12**, the compatible IREE are:
+Python 3.11
 ```sh
-!pip install iree-compiler==20230815.614 iree-runtime==20230815.614
+pip install iree_compiler==20240129.785 iree_runtime==20240129.785
+```
+
+Python 3.10
+```sh
+pip install iree-compiler==20230815.614 iree-runtime==20230815.614
 ```
 
 However, newer IREE like v20230815.614 has problems for performance bechmark (iree-benchmark-module), the resolution is:
@@ -120,25 +130,57 @@ cp /opt/conda/lib/python3.10/site-packages/iree/_runtime_libs/iree-benchmark-mod
 ```
 
 ### Torch-MLIR, IREE-TF, ONNX-MLIR
-Torch-MLIR is bunded with torch (dev), to compile torch models using Torch-MLIR, you need to download both torch-mlir and torch package from their release website, for example https://github.com/llvm/torch-mlir/releases/tag/snapshot-20230525.849 The installed torch-mlir also need to be compatible with IREE. Torch-MLIR requires torchvision 0.16.0
+Torch-MLIR is bunded with torch (dev), to compile torch models using Torch-MLIR, you need to download both torch-mlir and torch package from their release website, for example https://github.com/llvm/torch-mlir/releases/tag/snapshot-20240127.1096 The installed torch-mlir also need to be compatible with IREE. Torch-MLIR requires torchvision 0.18.0
 ```sh
-!pip install torchvision==0.16.0 --no-dependencies
+!pip install https://github.com/llvm/torch-mlir/releases/download/snapshot-20240127.1096/torch_mlir-20240127.1096-cp311-cp311-linux_x86_64.whl --no-dependencies
+!pip install https://github.com/llvm/torch-mlir/releases/download/snapshot-20240127.1096/torch-2.3.0.dev20240122+cpu-cp311-cp311-linux_x86_64.whl --no-dependencies
+!pip install https://download.pytorch.org/whl/cpu/torchvision-0.18.0%2Bcpu-cp311-cp311-linux_x86_64.whl --no-dependencies
+```
+
+The compatible IREE backend for recent torch-mlir release (Python 3.11 environment) is:
+```sh
+!pip install iree_compiler==20240129.785 iree_runtime==20240129.785
+```
+
+If you are using Python 3.9, Python 3.10 or previous torch-mlir release, you may use previous IREE backend:
+```sh
+!pip install iree-compiler==20230815.614 iree-runtime==20230815.614
+```
+```sh
+!pip install iree-compiler==20230524.529 iree-runtime==20230524.529
 ```
 
 IREE-TF and some Tensorflow models has the following dependencies
 ```sh
-!pip uninstall tensorflow -y
-!pip install tensorflow-cpu==2.13.0
-!pip install tensorflow-addons==0.21.0
-!pip install validators
-!pip install scipy
-!pip install opencv-python
-!apt install libgl1 -y
+pip uninstall tensorflow -y
+pip install tensorflow-cpu==2.13.0
+pip install tensorflow-addons==0.21.0
+pip install validators
+pip install scipy
+pip install opencv-python
+apt install libgl1 -y
 ```
 
-If you encouter problems for compiling models using IREE-TF, you may lower the IREE TF tools:
+The compatible IREE backend for tensorflow 2.13, 2.14 and 2.15 is:
 ```sh
-!pip install iree-tools-tf==20230524.529  iree-tools-tflite==20230524.529
+pip install iree-compiler==20230815.614 iree-runtime==20230815.614
+```
+```sh
+pip install iree-compiler==20230524.529 iree-runtime==20230524.529
+```
+
+If you encouter problems for compiling models using IREE-TF, you may install the IREE-TF tools and other versions of iree-runtime:
+```sh
+pip install iree-tools-tf==20230524.529  iree-tools-tflite==20230524.529
+
+# Python 3.9
+pip install https://github.com/iree-org/iree/releases/download/candidate-20230816.615/iree_runtime-20230816.615-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+# Python 3.10
+pip https://github.com/iree-org/iree/releases/download/candidate-20230816.615/iree_runtime-20230816.615-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+# Python 3.11
+pip install https://github.com/iree-org/iree/releases/download/candidate-20230816.615/iree_runtime-20230816.615-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 ```
 
 ONNX-MLIR on GPU? No official support yet.
