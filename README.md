@@ -20,15 +20,14 @@ https://www.kaggle.com/code/anomyuser/test-tf
 
 **The Internet Connection** in the Kaggle notebook need to be **turned on** to allow package download.
 
-### Option 2 (setup local environment with jupyter notebook):
-Execute provided jupyter notebooks in the examples folder, be sure to install dependencies (as denoted inside the jupyter notebook):
+### Option 2 (test locally with jupyter notebook):
+Execute provided jupyter notebooks in the examples folder, be sure to install dependencies:
 ```sh
-test_tf.ipynb
+examples/ufront_test.ipynb
 
-test_torch.ipynb
+examples/test_tf.ipynb
 
-test_accuracy.ipynb
-
+examples/test_torch.ipynb
 ```
 
 ### Option 3 (suitable for debug):
