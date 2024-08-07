@@ -1,10 +1,5 @@
 /target
-/cpp
-/python
-/rawapi
-/src
-/.github
-.gitmodules
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .pytest_cache/

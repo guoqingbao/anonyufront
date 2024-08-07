@@ -91,7 +91,46 @@ pip install iree-compiler==20230330.474 -f https://github.com/iree-org/iree/rele
 pip iree-runtime==20230330.474 -f https://github.com/iree-org/iree/releases/download/candidate-20230330.474/iree_runtime-20230330.474-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 ```
 
+## How to build UFront from the source code
+
+### Code structure
+1. `python folder` (written in Python): model tracing
+2. `src folder` (written in Rust): unified interface, type inference, high-level IR generation
+3. `cpp folder` (written in C++): high-level IR to low-level IR conversion with MLIR pipeline (i.e., UFront2TOSA, or TOSA Convertor)
+
+### Build TOSA Convertor first
+Going to folder `cpp/UFront2TOSA`, build the TOSA Convertor according to the subproject's README.
+
+### Build UFront release package (assume you have maturin installed)
+In the `main` folder, execute the following command (you may change `python3.9` to your python version)
+
+```
+maturin build --release -i python3.9
+```
+
+Maturin will build UFront package into folder `target/wheels/`
+
+### Install UFront package on the target machine (with GPU support)
+In the `main` folder, execute the following command (you may change `.whl` to the package you built)
+
+```
+pip install target/wheels/ufront-0.1.1-cp39-cp39-manylinux_2_28_x86_64.whl
+```
+
+### Perform the tests
+`Option 1:` upload the ufront package you built to online Kaggle environment (previously given), install the package and perform the online test using free GPU resources;
+
+`Option 2:` install the ufront package you built on a target machine (with GPU support), perform the offline test using the given Jupyter Notebooks.
+
+
 ## Trouble shootings
+### 0. UFront build error
+ ```
+ = note: /usr/bin/ld: cannot find -lUfrontCAPI
+          collect2: error: ld returned 1 exit status
+ ``` 
+
+You need to `first build TOSA convertor` (folder cpp/UFront2TOSA) then build UFront package because the package is relying on the convertor.
 
 ### 1. CUDA RuntimeError
 
