@@ -156,8 +156,6 @@ Value initWeightForConv2D(ElidedOp elided, OpBuilder& builder) {
     *iter *= scale;
   }
 
-  // TODO: case [batch > 1]
-
   auto attr = DenseElementsAttr::get(type, llvm::ArrayRef(values));
   return builder.create<tosa::ConstOp>(elided.getLoc(), type, attr);
 }
@@ -182,8 +180,6 @@ Value initWeightForLinear(ElidedOp elided, OpBuilder& builder) {
 
   auto range = sqrtf32(1.0 / features);
   auto values = getUniformArray(size, -range, range);
-
-  // TODO: case [batch > 1]
 
   auto attr = DenseElementsAttr::get(type, llvm::ArrayRef(values));
   return builder.create<tosa::ConstOp>(elided->getLoc(), type, attr);

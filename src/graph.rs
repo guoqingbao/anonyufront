@@ -1,6 +1,6 @@
 use crate::operator::Operator;
-use pyo3::types::PyDict;
 use log::info;
+use pyo3::types::PyDict;
 pub trait GraphTrait {
     fn compile(&self, kwds: Option<&PyDict>);
     fn forward(&self);

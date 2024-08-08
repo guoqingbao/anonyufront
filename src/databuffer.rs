@@ -1,7 +1,7 @@
+use half::bf16;
+use half::f16;
 use std::any::{Any, TypeId};
 use std::mem::size_of;
-use half::f16;
-use half::bf16;
 
 pub trait NumType {}
 impl NumType for f64 {}
@@ -36,86 +36,126 @@ enum RawBuffer {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Buffer {
-    length : usize,
-    raw_values : RawBuffer,
+    length: usize,
+    raw_values: RawBuffer,
 }
 
 impl Buffer {
-    pub fn new<T: NumType + 'static>(length : usize, values : Option<Vec<T>>) -> Buffer {
-            match values {
-                Some(v) => {
-                    if TypeId::of::<T>() == TypeId::of::<f32>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<f32>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::FP32Buffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of f32!")
-                        }
-                    } else if TypeId::of::<T>() == TypeId::of::<f16>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<f16>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::FP16Buffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of f16!")
-                        }
-                    } else if TypeId::of::<T>() == TypeId::of::<bf16>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<bf16>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::BF16Buffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of bf16!")
-                        }
-                    } else if TypeId::of::<T>() == TypeId::of::<f64>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<f64>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::FP64Buffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of fp64!")
-                        }
-                    } else if TypeId::of::<T>() == TypeId::of::<i32>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<i32>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::I32Buffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of i32!")
-                        }
-                    } else if TypeId::of::<T>() == TypeId::of::<i64>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<i64>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::I64Buffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of i64!")
-                        }
-                    } else if TypeId::of::<T>() == TypeId::of::<bool>() {
-                        if let Some(ret) = cast_ref::<Vec<T>, Vec<bool>>(&v) {
-                            Buffer { length: length, raw_values : RawBuffer::BoolBuffer(ret.to_vec())}
-                        } else {
-                            panic!("Unabel to convert to vector of bool!")
+    pub fn new<T: NumType + 'static>(length: usize, values: Option<Vec<T>>) -> Buffer {
+        match values {
+            Some(v) => {
+                if TypeId::of::<T>() == TypeId::of::<f32>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<f32>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::FP32Buffer(ret.to_vec()),
                         }
                     } else {
-                        panic!("Not supported data type!")
+                        panic!("Unabel to convert to vector of f32!")
                     }
-                }
-                _ => {
-                    //lazy data buffer
-                    if TypeId::of::<T>() == TypeId::of::<f32>() {
-                        Buffer { length: length, raw_values : RawBuffer::FP32Buffer(Vec::<f32>::new())}
-                    } else if TypeId::of::<T>() == TypeId::of::<f16>() {
-                        Buffer { length: length, raw_values : RawBuffer::FP16Buffer(Vec::<f16>::new())}
-                    } else if TypeId::of::<T>() == TypeId::of::<bf16>() {
-                        Buffer { length: length, raw_values : RawBuffer::BF16Buffer(Vec::<bf16>::new())}
-                    } else if TypeId::of::<T>() == TypeId::of::<f64>() {
-                        Buffer { length: length, raw_values : RawBuffer::FP64Buffer(Vec::<f64>::new())}
-                    } else if TypeId::of::<T>() == TypeId::of::<i32>() {
-                        Buffer { length: length, raw_values : RawBuffer::I32Buffer(Vec::<i32>::new())}
-                    } else if TypeId::of::<T>() == TypeId::of::<i64>() {
-                        Buffer { length: length, raw_values : RawBuffer::I64Buffer(Vec::<i64>::new())}
-                    } else if TypeId::of::<T>() == TypeId::of::<bool>() {
-                        Buffer { length: length, raw_values : RawBuffer::BoolBuffer(Vec::<bool>::new())}
+                } else if TypeId::of::<T>() == TypeId::of::<f16>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<f16>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::FP16Buffer(ret.to_vec()),
+                        }
                     } else {
-                        panic!("Not supported data type!")
+                        panic!("Unabel to convert to vector of f16!")
                     }
+                } else if TypeId::of::<T>() == TypeId::of::<bf16>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<bf16>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::BF16Buffer(ret.to_vec()),
+                        }
+                    } else {
+                        panic!("Unabel to convert to vector of bf16!")
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<f64>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<f64>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::FP64Buffer(ret.to_vec()),
+                        }
+                    } else {
+                        panic!("Unabel to convert to vector of fp64!")
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<i32>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<i32>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::I32Buffer(ret.to_vec()),
+                        }
+                    } else {
+                        panic!("Unabel to convert to vector of i32!")
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<i64>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<i64>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::I64Buffer(ret.to_vec()),
+                        }
+                    } else {
+                        panic!("Unabel to convert to vector of i64!")
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<bool>() {
+                    if let Some(ret) = cast_ref::<Vec<T>, Vec<bool>>(&v) {
+                        Buffer {
+                            length: length,
+                            raw_values: RawBuffer::BoolBuffer(ret.to_vec()),
+                        }
+                    } else {
+                        panic!("Unabel to convert to vector of bool!")
+                    }
+                } else {
+                    panic!("Not supported data type!")
                 }
             }
-
-
+            _ => {
+                //lazy data buffer
+                if TypeId::of::<T>() == TypeId::of::<f32>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::FP32Buffer(Vec::<f32>::new()),
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<f16>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::FP16Buffer(Vec::<f16>::new()),
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<bf16>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::BF16Buffer(Vec::<bf16>::new()),
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<f64>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::FP64Buffer(Vec::<f64>::new()),
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<i32>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::I32Buffer(Vec::<i32>::new()),
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<i64>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::I64Buffer(Vec::<i64>::new()),
+                    }
+                } else if TypeId::of::<T>() == TypeId::of::<bool>() {
+                    Buffer {
+                        length: length,
+                        raw_values: RawBuffer::BoolBuffer(Vec::<bool>::new()),
+                    }
+                } else {
+                    panic!("Not supported data type!")
+                }
+            }
+        }
     }
 
-    pub fn to_vec<T: NumType + Copy+ 'static>(&mut self) -> Vec<T> {
+    pub fn to_vec<T: NumType + Copy + 'static>(&mut self) -> Vec<T> {
         match &mut self.raw_values {
             RawBuffer::FP32Buffer(v) => {
                 if v.len() == 0 && self.length > 0 {
@@ -160,7 +200,6 @@ impl Buffer {
                 cast_ref::<Vec<bool>, Vec<T>>(&v).unwrap().to_owned()
             }
         }
-
     }
 
     pub fn as_ptr<T: Any>(&self) -> *const T {
@@ -200,7 +239,9 @@ pub enum DataBuffer {
 impl DataBuffer {
     pub fn get_type_id(&self) -> TypeId {
         match self {
-            DataBuffer::CPUDataBuffer(buf) | DataBuffer::GPUDataBuffer(buf) | DataBuffer::GCUDataBuffer(buf) => {
+            DataBuffer::CPUDataBuffer(buf)
+            | DataBuffer::GPUDataBuffer(buf)
+            | DataBuffer::GCUDataBuffer(buf) => {
                 // buf.raw_buffer.element_type_id()
                 match &buf.raw_values {
                     RawBuffer::FP32Buffer(_) => {

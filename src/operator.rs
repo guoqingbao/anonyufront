@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-use crate::databuffer::DataBuffer;
 use crate::databuffer::Buffer;
-// use crate::tensor::Tensor;
+use crate::databuffer::DataBuffer;
 use crate::tensor::Tensor;
 use crate::tensor::TensorU;
 use crate::types::DataType;
 use crate::types::OpType;
-use core::panic;
-use std::any::TypeId;
-use half::{f16, bf16};
 use ::num::abs;
-use numpy::{PyReadonlyArrayDyn};
-// use pyo3::exceptions::PyOSError;
+use core::panic;
+use half::{bf16, f16};
+use numpy::PyReadonlyArrayDyn;
+use std::any::TypeId;
 use indexmap::IndexMap;
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 use std::collections::HashMap;
-// use std::os::raw::c_void;
 use itertools::Itertools;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 static IDX: AtomicUsize = AtomicUsize::new(0);
-use log::{info, warn, error};
+use log::{error, info, warn};
 pub trait Texualization {
     fn dump(&self) -> String;
 }
@@ -45,7 +42,6 @@ pub trait OperatorTrait {
 }
 #[repr(C)]
 pub struct Operator {
-    // pub id : usize,
     pub inputs: Vec<Tensor>,
     pub outputs: Vec<Tensor>,
     pub op_type: OpType,
@@ -58,13 +54,6 @@ impl PartialEq for Operator {
         self as *const Operator as u64 == other as *const Operator as u64
     }
 }
-
-// impl Clone for Operator {
-//     fn clone(&self) -> Self {
-//         let params_ = self.params.clone();
-//         Operator {id : self.id, op_type : self.op_type, params : params_, inputs : self.inputs.clone(), outputs : self.outputs.clone()}
-//     }
-// }
 
 impl OperatorTrait for Operator {
     fn forward(&self) {}
@@ -83,16 +72,6 @@ impl Texualization for Operator {
 impl Operator {
     pub fn new(op: OpType, params: IndexMap<String, String>) -> Operator {
         info!("Operator::new------------------------------------------------------------------");
-        // let mut params_ : HashMap<String, String> = HashMap::new();
-        // params_.extend(params.into_iter());
-        // Python::with_gil(|py| {
-        //     let inputs: Py<Tensor> = Py::new(py, Tensor { tensor : None})?;
-        //     let outputs: Py<Tensor> = Py::new(py, Tensor { tensor : None})?;
-
-        //     let operator = Operator {id : id, inputs : inputs, outputs : outputs, op_type : op, params : params_};
-        //     // return operator;
-        //     Ok(PyClassInitializer::from(operator))
-        // })
         Operator {
             inputs: Vec::new(),
             outputs: Vec::new(),
@@ -103,7 +82,6 @@ impl Operator {
     }
 
     pub fn num_of_inputs(&self) -> usize {
-        //
         let num = self.inputs.len();
         info!("Operator::num_of_inputs {num}");
         num
@@ -136,8 +114,7 @@ impl Operator {
                 shape: shape,
                 data_buffer: DataBuffer::CPUDataBuffer(Buffer::new::<i32>(sz, None)),
             }
-        } 
-        else if typeid == TypeId::of::<i64>() {
+        } else if typeid == TypeId::of::<i64>() {
             TensorU {
                 shape: shape,
                 data_buffer: DataBuffer::CPUDataBuffer(Buffer::new::<i64>(sz, None)),
@@ -146,30 +123,6 @@ impl Operator {
             panic!("Invalid type! {:?}", typeid);
         }
     }
-    // pub fn get_input_ndarray<'py>(&self, idx : usize, py: Python<'py>) -> &'py PyArrayDyn<f32>{
-    //     info!("Operator::get_input_ndarray {}", idx);
-    //     if idx < self.num_of_inputs() {
-
-    //         match &self.inputs[idx].tensor {
-    //             Some(v) => {
-    //                 match &v.data_buffer {
-    //                     DataBuffer::CPUDataBuffer(data) => ArrayD::from_shape_vec(v.shape.to_vec(), data.to_vec()).unwrap().into_pyarray(py),
-    //                     _ => panic!("Tensor conversion failed!")
-    //                 }
-    //             }
-    //             _ => panic!("Tensor not initialized!")
-    //         }
-    //     } else {
-    //         panic!("Tensor not initialized!")
-    //     }
-
-    // }
-
-    // pub fn get_input(&self, idx : usize) -> Result<&Tensor, ()> {
-
-    //     Err(())
-    //     // return Err(PyOSError::new_err("Failed to obtain tensor!".to_string()))
-    // }
 
     pub fn get_input<'py>(&mut self, idx: usize, py: Python<'py>) -> Py<Tensor> {
         info!("Operator::get_input idx {idx}");
@@ -184,29 +137,26 @@ impl Operator {
                     };
 
                     return Py::new(
-                            py,
-                            Tensor {
-                                tensor: Some(tensor_),
-                                name: self.inputs[idx].name.clone(),
-                                dtype: self.inputs[idx].dtype,
-                            },
-                        )
-                        .unwrap();
+                        py,
+                        Tensor {
+                            tensor: Some(tensor_),
+                            name: self.inputs[idx].name.clone(),
+                            dtype: self.inputs[idx].dtype,
+                        },
+                    )
+                    .unwrap();
                 }
                 _ => {
                     panic!("Unable to obtain output!");
                 }
-
             }
         }
         panic!("Error get_input!");
-        // Err(())
     }
 
-    pub fn get_output<'py>(&self, idx: usize, py: Python<'py>) -> Py<Tensor>{
+    pub fn get_output<'py>(&self, idx: usize, py: Python<'py>) -> Py<Tensor> {
         info!("Operator::get_output idx {idx}");
         if idx < self.num_of_outputs() {
-            // return Ok(&self.outputs[idx]);
             match &self.outputs[idx].tensor {
                 Some(v) => {
                     let tensor_ = TensorU {
@@ -215,47 +165,38 @@ impl Operator {
                     };
 
                     return Py::new(
-                            py,
-                            Tensor {
-                                tensor: Some(tensor_),
-                                name: self.outputs[idx].name.clone(),
-                                dtype: self.outputs[idx].dtype,
-                            },
-                        )
-                        .unwrap();
+                        py,
+                        Tensor {
+                            tensor: Some(tensor_),
+                            name: self.outputs[idx].name.clone(),
+                            dtype: self.outputs[idx].dtype,
+                        },
+                    )
+                    .unwrap();
                 }
                 _ => {
                     panic!("Unable to obtain output!");
                 }
-
             }
 
-            // return self.outputs[idx].get_ndarray(py);
         }
-        // Err(())
         panic!("Error get_output!");
-
     }
 
     pub fn get_input_ndarray<'py>(&mut self, idx: usize, py: Python<'py>) -> &'py PyAny {
         info!("Operator::get_input idx {idx}");
         if idx < self.num_of_inputs() {
-            // return Ok(&mut self.inputs[idx]);
             return self.inputs[idx].get_ndarray(py);
         }
         panic!("Error get_input!");
-        // Err(())
     }
 
-    pub fn get_output_ndarray<'py>(&mut self, idx: usize, py: Python<'py>) -> &'py PyAny{
+    pub fn get_output_ndarray<'py>(&mut self, idx: usize, py: Python<'py>) -> &'py PyAny {
         info!("Operator::get_output idx {idx}");
         if idx < self.num_of_outputs() {
-            // return Ok(&self.outputs[idx]);
             return self.outputs[idx].get_ndarray(py);
         }
-        // Err(())
         panic!("Error get_output!");
-
     }
 
     pub fn add_input(&mut self, x: TensorU, name: String, dtype: DataType) {
@@ -273,36 +214,23 @@ impl Operator {
         return name;
     }
     pub fn add_output(&mut self, x: TensorU, dtype: Option<DataType>) {
-        
         let _dtype = match dtype {
-            Some(t) => { t }
-            _ => { DataType::Float }
+            Some(t) => t,
+            _ => DataType::Float,
         };
 
-        // if !self.outputs.is_empty() {
-            // let mut name = self.params["name"].clone();
-            // let idx = IDX.fetch_add(1, Ordering::SeqCst);
-            // name += idx.to_string().as_str();
-
-            self.outputs.push(Tensor {
-                tensor: Some(x),
-                name: self.get_unique_name(),
-                dtype: _dtype,
-            });
-        // } else {
-        //     self.outputs.push(Tensor {
-        //         tensor: Some(x),
-        //         name: self.params["name"].to_string(),
-        //         dtype: _dtype,
-        //     });
-        // }
+        self.outputs.push(Tensor {
+            tensor: Some(x),
+            name: self.get_unique_name(),
+            dtype: _dtype,
+        });
     }
 
     pub fn calculate_output(&mut self, para: &PyDict) {
         info!("Operator::calculate_output for {:?}", self.op_type);
-        if self.op_type!=OpType::ARANGE { //arange has no inputs
+        if self.op_type != OpType::ARANGE {
             assert!(!self.inputs.is_empty());
-        } 
+        }
         match self.op_type {
             OpType::CONV2D => {
                 let mut padding_w = 0;
@@ -344,7 +272,7 @@ impl Operator {
                             //formula [(W + 2*P - D*(K-1) - 1)/S]+1 , conv2d 2d
                             let h = (v.shape[2] + 2 * padding_h - dilation_h * (kernel_h - 1) - 1) / stride_h + 1;
                             let w = (v.shape[3] + 2 * padding_w - dilation_w * (kernel_w - 1) - 1) / stride_w + 1;
-                            
+
                             let output_channel = if self.params.contains_key("out_channels") {
                                 self.params["out_channels"].trim().parse::<usize>().unwrap()
                             } else {
@@ -399,7 +327,7 @@ impl Operator {
 
                             let output_size : Vec<usize> = self.params["output_size"].replace(['[', ']'], "").split(",").map(|x| x.trim().parse::<usize>().unwrap()).collect();
                             let mut output_shape = v.shape.clone();
-                            
+
                             if v.shape.len() <= 3 {
                                 output_shape = if self.channel_first {vec![v.shape[0], v.shape[1], output_size[0]]} else {vec![v.shape[0], output_size[0], v.shape[3]]};
                             } else {
@@ -425,19 +353,17 @@ impl Operator {
                     let mut dilation_h = 1;
 
                     if self.params.contains_key("pad") {
-                        // padding_w = self.params["padding_w"].trim().parse::<usize>().unwrap();
                         let padding : Vec<usize> = self.params["pad"].replace(['[', ']'], "").split(",").map(|x| x.trim().parse::<usize>().unwrap()).collect();
                         padding_h = padding[0];
                         padding_w = padding[1];
                     }
 
                     if self.params.contains_key("dilation") {
-                        // padding_w = self.params["padding_w"].trim().parse::<usize>().unwrap();
                         let dilation : Vec<usize> = self.params["dilation"].replace(['[', ']'], "").split(",").map(|x| x.trim().parse::<usize>().unwrap()).collect();
                         dilation_h = dilation[0];
                         dilation_w = dilation[1];
                     }
-    
+
                     if self.params.contains_key("kernel")
                         && self.params.contains_key("stride")
                     {
@@ -447,8 +373,7 @@ impl Operator {
                         let stride : Vec<usize> = self.params["stride"].replace(['[', ']'], "").split(",").map(|x| x.trim().parse::<usize>().unwrap()).collect();
                         let stride_h = stride[0];
                         let stride_w  = stride[1];
-                        
-                        
+
                         match &self.inputs[0].tensor {
                             Some(v) => {
                                 //formula [(W + 2*P - D*(K-1) - 1)/S]+1 , max_pool 2d
@@ -493,11 +418,11 @@ impl Operator {
 
                 if self.params.contains_key("start") {
                     start = self.params["start"].trim().parse::<usize>().unwrap();
-                } 
+                }
 
                 if self.params.contains_key("step") {
                     step = self.params["step"].trim().parse::<usize>().unwrap();
-                } 
+                }
 
                 let length = (end - start) / step;
                 let output_shape = vec![length];
@@ -521,13 +446,12 @@ impl Operator {
                         } else {
                             panic!("Missing parameter 'embedding_dim' for embedding!");
                         }
-    
+
                         let output_shape = vec![v.shape[0], v.shape[1], embedding_dim];
-                        
+
                         let sz: usize = output_shape.iter().product();
                         let tensor = Operator::empty_tensor(v.data_buffer.get_type_id(), sz, output_shape.clone());
 
-                        // self.add_output(tensor, Some(self.inputs[0].dtype));
                         self.add_output(tensor, Some(DataType::Float)); //input i64, output f32
                         info!(
                             "Output tensor with shape {:?} created within Rust for operator {:?}!",
@@ -564,7 +488,7 @@ impl Operator {
             | OpType::BATCH_NORM
             | OpType::LAYER_NORM
             | OpType::UNIFORM_LIKE
-            | OpType::LESS 
+            | OpType::LESS
             | OpType::CAST //TODO results cast into given type
             | OpType::EQ //output shape of equal op (compare a tensor with a scalar) is the shape of input
             | OpType::MASKEDFILL //output shape of masked_fill is equal to the input
@@ -583,11 +507,6 @@ impl Operator {
             | OpType::RECIPROCAL
             | OpType::NEG
              => {
-                // let activations = vec![OpType::ELU, OpType::RELU, OpType::GELU, OpType::SIGMOID, OpType::TANH];
-                // let inplace = if self.params.contains_key("inplace") {self.params["inplace"]=="True"} else {false};
-                // if false && activations.iter().any(|&act| act==self.op_type)  {
-                //        //TODO: implements inplace operator for activations
-                // } else {
                 match &self.inputs[0].tensor {
                     Some(v) => {
                         info!(
@@ -595,10 +514,10 @@ impl Operator {
                             v.shape, self.op_type
                         );
                         let tensor = Operator::empty_tensor(v.data_buffer.get_type_id(), v.shape.iter().product(), v.shape.clone());
-                        
+
                         if OpType::LESS == self.op_type {
                             self.add_output(tensor, Some(DataType::Bool));
-                        } 
+                        }
                         else if OpType::CAST == self.op_type {
                             let dtype = para.get_item("dtype").unwrap().extract::<DataType>().unwrap();
                             self.add_output(tensor, Some(dtype));
@@ -619,7 +538,7 @@ impl Operator {
                         let mut v2shape = v2.shape.clone();
 
                         if v1shape.len() != v2shape.len() {
-    
+
                             let mut vshape = if v1shape.len() > v2shape.len() {v1shape.clone()} else {v2shape.clone()};
                             vshape = vshape[0..v1shape.len().abs_diff(v2shape.len())].to_vec();
                             vshape.extend(if v1shape.len() > v2shape.len() {v2shape.clone()} else {v1shape.clone()});
@@ -631,14 +550,13 @@ impl Operator {
                             else {
                                 v1shape = vshape;
                             }
-                            // panic!("Mismatched shape a={:?}, b={:?}!", v1.shape, v2.shape);
                         }
                         let mut output_shape = vec![];
                         for i in 0..v1shape.len() {
                             if v1shape[i] != v2shape[i] && v1shape[i] != 1 && v2shape[i] != 1 {
                                 panic!("Mismatched shape a={:?}, b={:?} in dim {}!", v1shape, v2shape, i);
                             }
-                            output_shape.push(if v1shape[i] > v2shape[i] {v1shape[i]} else {v2shape[i]}); 
+                            output_shape.push(if v1shape[i] > v2shape[i] {v1shape[i]} else {v2shape[i]});
                         }
 
                         info!(
@@ -736,8 +654,8 @@ impl Operator {
                                         sizes.push(eachsize);
                                     }
                                 }
-                                    
-                                if sizes.len() * eachsize < output_shape[idx as usize] { 
+
+                                if sizes.len() * eachsize < output_shape[idx as usize] {
                                     if self.op_type == OpType::CHUNK { //the remaining parts for chunk
                                         sizes.push(output_shape[idx as usize] - sizes.len() * eachsize);
                                     }
@@ -778,7 +696,7 @@ impl Operator {
                             let dim = self.params["end_dim"].trim().parse::<i32>().unwrap();
                             if dim > -1 {
                                 end_dim = dim as usize;
-                            } 
+                            }
                         }
                         let mut output_shape = vec![];
                         let mut reduced_dim = 1;
@@ -788,8 +706,7 @@ impl Operator {
                                 if i == end_dim {
                                     output_shape.push(reduced_dim);
                                 }
-                            } 
-                            else {
+                            } else {
                                 output_shape.push(v.shape[i]);
                             }
                         }
@@ -979,7 +896,7 @@ impl Operator {
                             if self.params["keepdims"].trim() == "True" {
                                 keepdims = true;
                             }
-                        } 
+                        }
 
                         let mut output_shape: Vec<usize> = vec![];
                         if self.params.contains_key("dims") {
@@ -1002,7 +919,7 @@ impl Operator {
                                     }
                                 }
                             }
-                        } 
+                        }
 
                         let sz: usize = output_shape.iter().product();
                         let tensor = Operator::empty_tensor(v.data_buffer.get_type_id(), sz, output_shape.clone());
@@ -1083,7 +1000,7 @@ impl Operator {
                         for i in 0..repeats.len() {
                             output_shape.push(v.shape[i] * repeats[i]);
                         }
-               
+
 
                         let sz: usize = output_shape.iter().product();
                         let tensor = Operator::empty_tensor(v.data_buffer.get_type_id(), sz, output_shape.clone());
@@ -1186,18 +1103,33 @@ impl Operator {
                 params["initializer"] = params["initializer"].replace('\n', "");
             } else {
                 match &self.outputs[0].tensor {
-                    Some(v) => match &v.data_buffer { 
+                    Some(v) => match &v.data_buffer {
                         DataBuffer::CPUDataBuffer(data) => {
                             if self.outputs[0].dtype == DataType::Float {
-                                params.insert("initializer".to_string(), format!("{:?}", data.as_ptr::<f32>()));
+                                params.insert(
+                                    "initializer".to_string(),
+                                    format!("{:?}", data.as_ptr::<f32>()),
+                                );
                             } else if self.outputs[0].dtype == DataType::Int64 {
-                                params.insert("initializer".to_string(), format!("{:?}", data.as_ptr::<i64>()));
+                                params.insert(
+                                    "initializer".to_string(),
+                                    format!("{:?}", data.as_ptr::<i64>()),
+                                );
                             } else if self.outputs[0].dtype == DataType::Int32 {
-                                params.insert("initializer".to_string(), format!("{:?}", data.as_ptr::<i32>()));
+                                params.insert(
+                                    "initializer".to_string(),
+                                    format!("{:?}", data.as_ptr::<i32>()),
+                                );
                             } else if self.outputs[0].dtype == DataType::BHalf {
-                                params.insert("initializer".to_string(), format!("{:?}", data.as_ptr::<bf16>()));
+                                params.insert(
+                                    "initializer".to_string(),
+                                    format!("{:?}", data.as_ptr::<bf16>()),
+                                );
                             } else {
-                                params.insert("initializer".to_string(), format!("{:?}", data.as_ptr::<f16>()));
+                                params.insert(
+                                    "initializer".to_string(),
+                                    format!("{:?}", data.as_ptr::<f16>()),
+                                );
                             }
                             // let v = data.to_vec()[100];
                             // let memaddr = format!("{:?}", data.as_ptr());
@@ -1266,7 +1198,7 @@ impl Operator {
             }
         }
 
-        if self.op_type == OpType::CONV2D || self.op_type == OpType::LINEAR{
+        if self.op_type == OpType::CONV2D || self.op_type == OpType::LINEAR {
             params.remove("weight");
             params.remove("bias");
             let mut segment_sizes = vec![0; 3];
@@ -1275,10 +1207,13 @@ impl Operator {
             }
             let mut strsize = format!("{:?}", segment_sizes);
             strsize = strsize.replace("[", "").replace("]", "");
-            params.insert("operand_segment_sizes".to_string(), format!("array<i32:{strsize}>"));
+            params.insert(
+                "operand_segment_sizes".to_string(),
+                format!("array<i32:{strsize}>"),
+            );
         }
 
-        if self.op_type == OpType::MULTIHEAD_ATTENTION{
+        if self.op_type == OpType::MULTIHEAD_ATTENTION {
             params.remove("weight_q");
             params.remove("weight_k");
             params.remove("weight_v");
@@ -1287,30 +1222,40 @@ impl Operator {
             params.remove("bias_k");
             params.remove("bias_v");
             params.remove("bias_o");
-            
+
             let mut segment_sizes = vec![0; 12];
             for i in 0..self.inputs.len() {
                 segment_sizes[i] = 1;
             }
             let mut strsize = format!("{:?}", segment_sizes);
             strsize = strsize.replace("[", "").replace("]", "");
-            params.insert("operand_segment_sizes".to_string(), format!("array<i32:{strsize}>"));
+            params.insert(
+                "operand_segment_sizes".to_string(),
+                format!("array<i32:{strsize}>"),
+            );
             // println!("array<i64:{strsize}>")
         }
 
-        if self.op_type == OpType::BATCH_NORM || self.op_type == OpType::LAYER_NORM{
+        if self.op_type == OpType::BATCH_NORM || self.op_type == OpType::LAYER_NORM {
             params.remove("weight");
             params.remove("bias");
             params.remove("mean");
             params.remove("variance");
-            
-            let mut segment_sizes = if self.op_type == OpType::BATCH_NORM {vec![0; 5]} else {vec![0; 3]};
+
+            let mut segment_sizes = if self.op_type == OpType::BATCH_NORM {
+                vec![0; 5]
+            } else {
+                vec![0; 3]
+            };
             for i in 0..self.inputs.len() {
                 segment_sizes[i] = 1;
             }
             let mut strsize = format!("{:?}", segment_sizes);
             strsize = strsize.replace("[", "").replace("]", "");
-            params.insert("operand_segment_sizes".to_string(), format!("array<i32:{strsize}>"));
+            params.insert(
+                "operand_segment_sizes".to_string(),
+                format!("array<i32:{strsize}>"),
+            );
         }
 
         params.remove("activation"); //fused activation not supported at the moment
@@ -1346,7 +1291,7 @@ impl Operator {
             if &input_names[input_names.len() - 1..] == "," {
                 input_names.pop();
             }
-    
+
             input_shapes = input_shapes.trim().to_string();
             if &input_shapes[input_shapes.len() - 1..] == "," {
                 input_shapes.pop();
@@ -1385,7 +1330,7 @@ impl Operator {
             if &output_names[output_names.len() - 1..] == "," {
                 output_names.pop();
             }
-    
+
             output_shapes = output_shapes.trim().to_string();
             if &output_shapes[output_shapes.len() - 1..] == "," {
                 output_shapes.pop();
@@ -1396,7 +1341,8 @@ impl Operator {
             output_shapes += ")";
         }
 
-        if self.op_type == OpType::PARAMETER || self.op_type == OpType::TENSOR { //no inputs for these two ops
+        if self.op_type == OpType::PARAMETER || self.op_type == OpType::TENSOR {
+            //no inputs for these two ops
             input_names = "".to_string();
             input_shapes = "".to_string();
         }
@@ -1416,8 +1362,7 @@ impl Operator {
                     params_str += format!("{key}=\"{s}\"").as_str();
                 } else if key == "initializer" {
                     params_str += format!("{key}=\"{v}\"").as_str();
-                }
-                else {
+                } else {
                     params_str += format!("{key}={v}").as_str();
                 };
                 params_str += ", ";
@@ -1433,8 +1378,6 @@ impl Operator {
 
 #[pyclass]
 pub struct PyOperator {
-    // #[pyo3(get, set)]
-    // pub id : usize,
     #[pyo3(get, set)]
     pub op_type: OpType,
     #[pyo3(get, set)]
@@ -1486,17 +1429,17 @@ impl PyOperator {
                 //     Ok(&mut tensor) => {
                 //         tensor.get_ndarray(py)
                 //     }
-                    // Ok(tensor) => match &tensor.tensor {
-                    //     Some(v) => match &v.data_buffer {
-                    //         DataBuffer::CPUDataBuffer(data) => {
-                    //             ArrayD::from_shape_vec(v.shape.to_vec(), data.to_vec())
-                    //                 .unwrap()
-                    //                 .into_pyarray(py)
-                    //         }
-                    //         _ => panic!("Tensor conversion failed!"),
-                    //     },
-                    //     _ => panic!("Tensor not initialized!"),
-                    // },
+                // Ok(tensor) => match &tensor.tensor {
+                //     Some(v) => match &v.data_buffer {
+                //         DataBuffer::CPUDataBuffer(data) => {
+                //             ArrayD::from_shape_vec(v.shape.to_vec(), data.to_vec())
+                //                 .unwrap()
+                //                 .into_pyarray(py)
+                //         }
+                //         _ => panic!("Tensor conversion failed!"),
+                //     },
+                //     _ => panic!("Tensor not initialized!"),
+                // },
                 //     _ => panic!("Tensor not initialized!"),
                 // }
             }
@@ -1615,14 +1558,13 @@ impl PyOperator {
             panic!("OUtput not added to the graph!");
         }
     }
-    pub fn get_input<'py>( &self, idx : usize, py: Python<'py>) -> Py<Tensor> {
+    pub fn get_input<'py>(&self, idx: usize, py: Python<'py>) -> Py<Tensor> {
         if self.raw_ptr > 0 {
             let operator = self.raw_ptr as *mut Operator;
             unsafe {
                 return (*operator).get_input(idx, py);
             }
-        }
-        else {
+        } else {
             panic!("Invalid operator pointer!");
         }
     }

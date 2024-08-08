@@ -25,7 +25,7 @@ use std::hash::{Hash, Hasher};
 pub enum DataType {
     Int32 = 100,
     Int64,
-    Half, //fp16
+    Half,  //fp16
     BHalf, //bf16
     Float,
     Double,
@@ -443,7 +443,7 @@ pub enum PoolType {
     POOL_AVG,
     POOL_ADAPTIVE,
     POOL_ADAPTIVE_MAX,
-    POOL_ADAPTIVE_AVG
+    POOL_ADAPTIVE_AVG,
 }
 
 #[pymethods]
@@ -532,4 +532,3 @@ pub enum WeightType {
     EXTERNAL = 9001,
     INTERNAL,
 }
-

@@ -1,7 +1,7 @@
+use log::{error, info, warn};
 use pyo3::prelude::*;
 use pyo3::pyclass;
 use std::collections::HashMap;
-use log::{info, warn, error};
 #[pyclass]
 #[derive(Debug, Clone)]
 pub struct Optimizer {

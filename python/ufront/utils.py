@@ -1,6 +1,16 @@
 import numpy as np
 from functools import reduce
-from .ufront import (OpType, ActiMode, AggrMode, PoolType, Tensor, DataType, ParamSyncType, Initializer)
+from .ufront import (
+    OpType,
+    ActiMode,
+    AggrMode,
+    PoolType,
+    Tensor,
+    DataType,
+    ParamSyncType,
+    Initializer,
+)
+
 try:
     import onnx
 except:
@@ -11,8 +21,10 @@ try:
 except:
     print("You need to first install pytorch package before compiling pytorch models!")
 
+
 def list_product(lst):
-    return reduce(lambda x, y: x*y, lst)
+    return reduce(lambda x, y: x * y, lst)
+
 
 def onnx_to_ufront_dtype(datatype):
     if datatype == onnx.TensorProto.FLOAT:
@@ -29,6 +41,7 @@ def onnx_to_ufront_dtype(datatype):
         return DataType.Bool
     else:
         assert 0, "Unsupported datatype"
+
 
 def torch_to_ufront_dtype(torch_dtype):
     if torch_dtype == torch.float32:
@@ -48,6 +61,7 @@ def torch_to_ufront_dtype(torch_dtype):
     else:
         assert 0, f"Unknown dtype: {torch_dtype}"
 
+
 def numpy_to_ufront_dtype(numpy_dtype):
     if numpy_dtype in (np.float32, "float32", "float"):
         return DataType.Float
@@ -66,10 +80,11 @@ def numpy_to_ufront_dtype(numpy_dtype):
     else:
         assert 0, f"Unknown dtype: {numpy_dtype}"
 
+
 def ufront_to_numpy_dtype(ff_dtype):
-    if ff_dtype ==DataType.Float:
+    if ff_dtype == DataType.Float:
         return np.float32
-    elif ff_dtype ==DataType.Double:
+    elif ff_dtype == DataType.Double:
         return np.float64
     elif ff_dtype == DataType.Int32:
         return np.int32

@@ -86,7 +86,6 @@ struct dtype_t {
   const char kind;
   const unsigned int itemsize;
 
-// TODO(llohse): implement as constexpr
   inline std::string str() const {
     const size_t max_buflen = 16;
     char buf[max_buflen];
@@ -456,7 +455,6 @@ inline std::string read_header(std::istream &istream) {
     header_length = (header_len_le16[0] << 0) | (header_len_le16[1] << 8);
 
     if ((magic_string_length + 2 + 2 + header_length) % 16 != 0) {
-      // TODO(llohse): display warning
     }
   } else if (version == version_t{2, 0}) {
     uint8_t header_len_le32[4];
@@ -466,7 +464,6 @@ inline std::string read_header(std::istream &istream) {
                     | (header_len_le32[2] << 16) | (header_len_le32[3] << 24);
 
     if ((magic_string_length + 2 + 4 + header_length) % 16 != 0) {
-      // TODO(llohse): display warning
     }
   } else {
     throw std::runtime_error("unsupported file format version");

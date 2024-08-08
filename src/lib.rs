@@ -28,12 +28,14 @@ use model::Model;
 use operator::PyOperator;
 use optimizer::Optimizer;
 use tensor::Tensor;
-use types::{ActiMode, AggrMode, DataType, LossType, MetricsType, OpType, ParamSyncType, PoolType, WeightType};
+use types::{
+    ActiMode, AggrMode, DataType, LossType, MetricsType, OpType, ParamSyncType, PoolType,
+    WeightType,
+};
 
 /// A Python module implemented in Rust.
 #[pymodule]
 fn ufront(_py: Python, m: &PyModule) -> PyResult<()> {
-    // m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
     m.add_class::<Model>()?;
     m.add_class::<Tensor>()?;
     m.add_class::<OpType>()?;
@@ -42,13 +44,10 @@ fn ufront(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<PoolType>()?;
     m.add_class::<DataType>()?;
     m.add_class::<Initializer>()?;
-    // m.add_class::<InitializerType>()?;
     m.add_class::<ParamSyncType>()?;
     m.add_class::<Optimizer>()?;
-    // m.add_class::<OptimizerType>()?;
     m.add_class::<LossType>()?;
     m.add_class::<MetricsType>()?;
-
     m.add_class::<PyOperator>()?;
     m.add_class::<WeightType>()?;
 
