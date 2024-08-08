@@ -3189,7 +3189,6 @@ class InputNode(Node):
         s = [self.name]
         s.append(self.parse_inoutnodes(self.innodes))
         s.append(self.parse_inoutnodes(self.outnodes))
-        # s.append(self.op_type.as_str())
         s.append(self.op_type.as_str())
 
         self._ir_string = IR_DELIMITER.join(s)
@@ -3208,25 +3207,8 @@ class OutputNode(Node):
         self.op_type = OpType.OUTPUT
 
     def parse(self):
-        # TODO: Assumes only one output
         self.assert_num_args(len(self.innodes), Comparator.EQ)
         s = [self.name]
-        # if type(self.innodes) is tuple:
-        #     s.append(self.parse_inoutnodes(self.innodes))
-        #     s.append(self.parse_inoutnodes(self.outnodes))
-        # # NOTE: This case targets MT5Model
-        # elif type(self.innodes[0]) is immutable_dict and \
-        #         "last_hidden_state" in self.innodes[0]:
-        #     innodes = (self.innodes[0]["last_hidden_state"],)
-        #     s.append(self.parse_inoutnodes(innodes))
-        #     s.append(self.parse_inoutnodes(self.outnodes))
-        # # NOTE: This case targets MT5ForConditionalGeneration
-        # elif type(self.innodes[0]) is immutable_dict and \
-        #         "logits" in self.innodes[0]:
-        #     innodes = (self.innodes[0]["logits"],)
-        #     s.append(self.parse_inoutnodes(innodes))
-        #     s.append(self.parse_inoutnodes(self.outnodes))
-        # else:
         s.append(self.parse_inoutnodes(self.innodes))
         s.append(self.parse_inoutnodes(self.outnodes))
         s.append(self.op_type.as_str())
@@ -3235,27 +3217,19 @@ class OutputNode(Node):
     def __call__(self, umodel, node_to_output, output_tensors):
         output_names = []
         for other in self.innodes:
-            # Destructively modify `output_tensors`
             if type(other) is immutable_dict:
                 assert "last_hidden_state" in other or "logits" in other
-                # NOTE: This case targets MT5Model
                 if "last_hidden_state" in other:
                     output_tensors[:] += [
                         node_to_output[other["last_hidden_state"].name]
                     ]
-                    # output_names.append(other["last_hidden_state"].name)
-                # NOTE: This case targets MT5ForConditionalGeneration
                 elif "logits" in other:
-                    # NOTE: Manually add a softmax layer since the model is
-                    # traced from PyTorch, which includes the softmax in its
-                    # `CrossEntropyLoss()` implementation
                     logits = node_to_output[other["logits"].name]
                     softmax_logits = umodel.softmax(
                         input=logits,
                         name=self.name,
                     )
                     output_tensors[:] += [softmax_logits]
-                    # output_names.append(self.name)
             else:
                 if other != None:
                     if type(other) == tuple:
@@ -3323,7 +3297,6 @@ class UFrontTorch:
 
         ret = self.external_functions[kwargs["func"]](**kwargs["args"])
         if type(ret) == torch.Tensor:
-            # print("Results after calling the external function: ", ret.shape)
             arr = ret.numpy()
             return Tensor(
                 np_tensor=arr,
@@ -3361,7 +3334,6 @@ class UFrontTorch:
             return ret
 
     def math_callback(self, **kwargs):
-        # print(kwargs)
         assert len(kwargs["args"]) > 0
         args = []
         for key, v in kwargs["args"].items():
@@ -3420,11 +3392,8 @@ class UFrontTorch:
         name_to_module = {}
         for name, module in self.model.named_modules():
             name_to_module[name] = module
-            # print(name)
         graph = []
         for fx_node in traced_graph.nodes:
-            # if fx_node.op == "placeholder":
-            # print(fx_node.op, " : ", fx_node.name)
             if fx_node.op == "output":
                 node = OutputNode(fx_node)
             elif fx_node.op == "placeholder":
@@ -3611,8 +3580,6 @@ class UFrontTorch:
                 node(self.ufront_model, node_to_output, output_tensors)
                 node_output = None
             else:
-                # if type(node) in [GetItemNode, GetAttrNode, AttributeNode, EqNode, AssertNode, ScalarAddNode, ScalarFloorDivNode, ScalarMulNode, ScalarSubNode, ScalarTrueDivNode]:
-                #     print(type(node), ": ", node.name)
                 if len(inputs_nodes) > 0:
                     self.ufront_model.input(
                         tensors=inputs_nodes, num_of_inputs=len(inputs_nodes)
