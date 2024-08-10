@@ -110,6 +110,12 @@ maturin build --release -i python3.9
 
 Maturin will build UFront package into folder `target/wheels/`
 
+**Note:** assume you have Rust compiler and Maturin installed, refer to:
+
+https://www.rust-lang.org/tools/install
+
+https://www.maturin.rs/installation 
+
 ### Install UFront package on the target machine (with GPU support)
 In the `main` folder, execute the following command (you may change `.whl` to the package you built)
 
